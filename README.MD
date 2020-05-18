@@ -13,6 +13,12 @@
 
 ---
 
+### ✌ Apresentação:
+
+Esta aplicação é um Client que simula a conexão com WhatsApp Web através do **Puppeteer**, instanciando em tempo real a conexão.
+
+---
+
 ### ▶ Instação:
 
 - Variável de ambiente `.env.example`:
@@ -27,7 +33,7 @@ PRINT_URL=private
 - Compilar TypeScript: `yarn compile` ou `npm run compile`
 - Iniciar aplicação em modo de desenvolvimento: `yarn dev` ou `npm run dev`.
 
-Caso de algum erro com a depedência Puppeteer, utilize: `npm install --global --unsafe-perm puppeteer`
+Caso dê algum erro com a depedência Puppeteer, utilize: `npm install --global --unsafe-perm puppeteer`
 
 Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso, basta escanear o QR Code:
 
@@ -55,7 +61,13 @@ Comando **!turno** é de uso exclusivo, não funcionará para uso público, isso
 
 ---
 
-### Agradecimentos
+### Isenção de Responsabilidade
+
+Este projeto não é afiliado, associado, autorizado, endossado por, ou de qualquer forma oficialmente conectado com o WhatsApp ou qualquer uma de suas subsidiárias ou suas afiliadas. O site oficial do WhatsApp pode ser encontrado em https://whatsapp.com. "WhatsApp" bem como nomes, marcas, emblemas e imagens relacionadas são marcas registradas de seus respectivos proprietários.
+
+---
+
+### Agradecimentos e Créditos
 
 - [@pedroslopez](https://github.com/pedroslopez)
 - [@raniellyferreira](https://github.com/raniellyferreira)
