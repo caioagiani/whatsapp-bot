@@ -22,9 +22,10 @@ TURNO_API=private
 PRINT_URL=private
 ```
 
-- Instalar dependências: `yarn`
-- Compilar TypeScript: `yarn compile`
-- Iniciar aplicação em modo de desenvolvimento: `yarn dev` ou `yarn start` para produção.
+- Instalar TypeScript Global `npm i -g typescript`
+- Instalar dependências: `yarn` ou `npm i`
+- Compilar TypeScript: `yarn compile` ou `npm run compile`
+- Iniciar aplicação em modo de desenvolvimento: `yarn dev` ou `npm run dev`.
 
 Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso, basta escanear o QR Code:
 
@@ -34,11 +35,11 @@ Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso
 
 ### 🔰 Comandos
 
-- BTC
-- DOLAR
-- EURO
+- !cotacao
+- !company
+- !turno
 
-Digite: `!cotacao` e o Bot consumirá a <a href="https://docs.awesomeapi.com.br/">API</a> de cotação das seguintes moedas:
+Digite: `!cotacao` e o Bot consumirá a <a href="https://docs.awesomeapi.com.br/">API</a> de cotação das seguintes moedas: (BTC, DOLAR, EURO)
 
 <img width="600" height="100%" src="https://i.imgur.com/qrqWQ6N.png" alt="Cotação da moeda">
 
