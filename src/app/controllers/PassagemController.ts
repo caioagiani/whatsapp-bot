@@ -1,19 +1,27 @@
 import { client, MessageMedia } from "../../server";
 import { readFileSync } from "fs";
 
-import * as puppeteer from "puppeteer";
-import * as dir from "path";
-import * as request from "request";
+import puppeteer from "puppeteer";
+import dir from "path";
+import request from "request";
 
-export default async (msg: {
+let commandExecute: boolean = false;
+
+interface IPassagem {
   getChat: () => any;
   reply: (args: string) => void;
   from: string;
-}) => {
+}
+
+export default async (msg: IPassagem) => {
   const chat = await msg.getChat();
   chat.sendStateTyping();
 
+  if (commandExecute == true)
+    return msg.reply("existe um processo em execução, por favor aguarde..");
+
   msg.reply(`aguarde enquanto estou gerando a passagem de turno...`);
+  commandExecute = true;
 
   const options: { method: string; url: string } = {
     method: "GET",
@@ -70,5 +78,6 @@ export default async (msg: {
 
     msg.reply(mensagem);
     client.sendMessage(msg.from, media);
+    commandExecute = false;
   });
 };

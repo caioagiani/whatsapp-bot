@@ -1,9 +1,11 @@
-import * as request from "request";
+import request from "request";
 
-export default async (msg: {
+interface IEconomia {
   getChat: () => any;
   reply: (args: string) => void;
-}) => {
+}
+
+export default async (msg: IEconomia) => {
   const chat = await msg.getChat();
   chat.sendStateTyping();
 

@@ -1,5 +1,5 @@
 import { Client, MessageMedia } from "whatsapp-web.js";
-import * as qrcode from "qrcode-terminal";
+import qrcode from "qrcode-terminal";
 
 const client = new Client();
 
