@@ -23,9 +23,11 @@ PRINT_URL=private
 ```
 
 - Instalar TypeScript Global `npm i -g typescript`
-- Instalar dependências: `yarn` ou `npm i`
+- Instalar dependências: `yarn install` ou `npm install`
 - Compilar TypeScript: `yarn compile` ou `npm run compile`
 - Iniciar aplicação em modo de desenvolvimento: `yarn dev` ou `npm run dev`.
+
+Caso de algum erro com a depedência Puppeteer, utilize: `npm install --global --unsafe-perm puppeteer`
 
 Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso, basta escanear o QR Code:
 

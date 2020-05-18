@@ -48,7 +48,11 @@ export default async (msg: IPassagem) => {
     const page = await browser.newPage();
     const path = dir.resolve("public", "images", "turno.png");
 
-    await page.goto(process.env.PRINT_URL);
+    await page.goto(process.env.PRINT_URL, {
+      waitUntil: "load",
+      timeout: 0,
+    });
+
     await page.screenshot({ path });
     await browser.close();
 
