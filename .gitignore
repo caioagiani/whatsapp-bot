@@ -7,3 +7,8 @@ yarn.lock
 
 public/images/*
 !public/images/.gitkeep
+
+src/config/*
+!src/config/integrtantes.example.json
+
+src/data/session.json

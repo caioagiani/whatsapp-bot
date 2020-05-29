@@ -46,6 +46,9 @@ Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso
 - !cotacao
 - !company
 - !turno
+- !pausa
+- !encerrar
+- !important
 
 Digite: `!cotacao` e o Bot consumirá a <a href="https://docs.awesomeapi.com.br/">API</a> de cotação das seguintes moedas: (BTC, DOLAR, EURO)
 

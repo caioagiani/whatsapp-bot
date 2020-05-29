@@ -8,6 +8,7 @@ import request from "request";
 let commandExecute: boolean = false;
 
 interface IPassagem {
+  getContact: () => any;
   getChat: () => any;
   reply: (args: string) => void;
   from: string;
@@ -15,12 +16,17 @@ interface IPassagem {
 
 export default async (msg: IPassagem) => {
   const chat = await msg.getChat();
+  const user = await msg.getContact();
+
   chat.sendStateTyping();
 
-  if (commandExecute == true)
-    return msg.reply("existe um processo em execução, por favor aguarde..");
+  if (commandExecute)
+    return msg.reply("existe um processo em execução, por favor aguarde...");
 
-  msg.reply(`aguarde enquanto estou gerando a passagem de turno...`);
+  msg.reply(
+    `@${user.id.user}, aguarde enquanto estou gerando a passagem de turno...`
+  );
+
   commandExecute = true;
 
   const options: { method: string; url: string } = {
@@ -80,8 +86,9 @@ export default async (msg: IPassagem) => {
       "passagem_automatica_bot.png"
     );
 
-    msg.reply(mensagem);
-    client.sendMessage(msg.from, media);
     commandExecute = false;
+    // msg.reply(mensagem);
+    client.sendMessage(msg.from, mensagem);
+    client.sendMessage(msg.from, media);
   });
 };

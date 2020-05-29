@@ -6,6 +6,7 @@ interface ICompany {
 
 export default async (msg: ICompany) => {
   const chat = await msg.getChat();
+
   chat.sendStateTyping();
 
   msg.reply(

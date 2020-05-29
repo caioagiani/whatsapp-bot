@@ -1,12 +1,16 @@
 import { client } from "./server";
 
-import EconomiaController from "./app/controllers/EconomiaController";
-import PassagemController from "./app/controllers/PassagemController";
-import CompanyController from "./app/controllers/CompanyController";
+import {
+  PassagemController,
+  EconomiaController,
+  CompanyController,
+  GlobalController,
+  PausaController,
+  EncerraController,
+} from "./app/controllers";
 
 client.on("message", async (message: any) => {
   switch (message.body) {
-    /** Exclusive command for 76Telecom company */
     case "!turno":
       await PassagemController(message);
       break;
@@ -17,6 +21,18 @@ client.on("message", async (message: any) => {
 
     case "!cotacao":
       await EconomiaController(message);
+      break;
+
+    case "!important":
+      await GlobalController(message);
+      break;
+
+    case "!pausa":
+      await PausaController(message);
+      break;
+
+    case "!encerrar":
+      await EncerraController(message);
       break;
   }
 });

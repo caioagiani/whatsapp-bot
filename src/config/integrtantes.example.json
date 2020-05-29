@@ -1,0 +1,12 @@
+{
+  "company": [
+    {
+      "admin": true,
+      "nome": "Caio Henrique",
+      "numero": "5511999865802",
+      "inicio": 13,
+      "pausa": 60,
+      "fim": 22
+    }
+  ]
+}
