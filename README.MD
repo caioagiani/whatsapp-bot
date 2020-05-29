@@ -35,7 +35,7 @@ PRINT_URL=private
 
 Caso dê algum erro com a depedência Puppeteer, utilize: `npm install --global --unsafe-perm puppeteer`
 
-Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso, basta escanear o QR Code:
+Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso, basta escanear o QR Code em seu terminal:
 
 <img width="600" height="100%" src="https://i.imgur.com/M9vKv5J.png" alt="Terminal">
 
@@ -72,7 +72,7 @@ Digite: `!encerrar` e o Bot encerra o seu expediente de acordo com seu horário.
 
 Digite: `!pausa` e o Bot enviará uma mensagem com o tempo que você deverá retornar.
 
-<img width="600" height="100%" src="https://i.imgur.com/EL9l6UN.png" alt="Pausa jornada">
+<img width="600" height="100%" src="https://i.imgur.com/0xIpYYw.png" alt="Pausa jornada">
 
 ---
 
