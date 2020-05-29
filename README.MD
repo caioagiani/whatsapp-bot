@@ -21,7 +21,7 @@ Esta aplicação é um Client que simula a conexão com WhatsApp Web através do
 
 ### ▶ Instação:
 
-- Variável de ambiente `.env.example`:
+- Variável ambiente: `.env.example`:
 
 ```java
 TURNO_API=private
@@ -31,7 +31,7 @@ PRINT_URL=private
 - Instalar TypeScript Global `npm i -g typescript`
 - Instalar dependências: `yarn install` ou `npm install`
 - Compilar TypeScript: `yarn compile` ou `npm run compile`
-- Iniciar aplicação em modo de desenvolvimento: `yarn dev` ou `npm run dev`.
+- Iniciar aplicação: `yarn dev` ou `npm run dev`.
 
 Caso dê algum erro com a depedência Puppeteer, utilize: `npm install --global --unsafe-perm puppeteer`
 
@@ -61,6 +61,18 @@ Digite: `!turno` e o Bot consumirá uma API própria, onde colhe recursos intern
 <img width="600" height="100%" src="https://i.imgur.com/XtZA3ha.png" alt="Passagem de turno">
 
 Comando **!turno** é de uso exclusivo, não funcionará para uso público, isso foi apenas uma demonstração.
+
+---
+
+Digite: `!encerrar` e o Bot encerra o seu expediente de acordo com seu horário.
+
+<img width="600" height="100%" src="https://i.imgur.com/EL9l6UN.png" alt="Encerrar jornada">
+
+---
+
+Digite: `!pausa` e o Bot enviará uma mensagem com o tempo que você deverá retornar.
+
+<img width="600" height="100%" src="https://i.imgur.com/EL9l6UN.png" alt="Pausa jornada">
 
 ---
 

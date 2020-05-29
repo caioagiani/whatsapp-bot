@@ -9,6 +9,7 @@ public/images/*
 !public/images/.gitkeep
 
 src/config/*
-!src/config/integrtantes.example.json
+!src/config/integrantes.example.json
 
 src/data/session.json
+!src/data/.gitkeep
