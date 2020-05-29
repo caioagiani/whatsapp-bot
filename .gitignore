@@ -8,8 +8,5 @@ yarn.lock
 public/images/*
 !public/images/.gitkeep
 
-src/config/*
-!src/config/integrantes.example.json
-
 src/data/session.json
 !src/data/.gitkeep
