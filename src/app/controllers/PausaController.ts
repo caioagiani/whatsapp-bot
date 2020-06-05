@@ -20,11 +20,11 @@ export default async (msg: ICompany) => {
   const date = new Date(Date.now());
 
   company.map((valores) => {
-    date.setMinutes(date.getMinutes() + valores.pausa);
-
-    let retorno = `${date.getHours()}:${date.getMinutes()}`;
-
     if (valores.numero == contato) {
+      date.setMinutes(date.getMinutes() + valores.pausa);
+
+      let retorno = `${date.getHours()}:${date.getMinutes()}`;
+
       msg.reply(
         `🤖: Boa pausa *${valores.nome}*, não se esqueça de voltar às *${retorno}h* ok?!!`
       );
