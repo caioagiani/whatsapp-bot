@@ -7,6 +7,7 @@ import {
   GlobalController,
   PausaController,
   EncerraController,
+  ZabbixController,
 } from "./app/controllers";
 
 client.on("message", async (message: any) => {
@@ -33,6 +34,10 @@ client.on("message", async (message: any) => {
 
     case "!encerrar":
       await EncerraController(message);
+      break;
+      
+    case "!zabbix":
+      await ZabbixController(message);
       break;
   }
 });

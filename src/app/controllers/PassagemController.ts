@@ -21,10 +21,10 @@ export default async (msg: IPassagem) => {
   chat.sendStateTyping();
 
   if (commandExecute)
-    return msg.reply("existe um processo em execução, por favor aguarde...");
+    return msg.reply("🤖: existe um processo em execução, por favor aguarde...");
 
   msg.reply(
-    `@${user.id.user}, aguarde enquanto estou gerando a passagem de turno...`
+    `🤖: @${user.id.user}, gerando passagem de *turno*, aguarde...`
   );
 
   commandExecute = true;
@@ -47,7 +47,7 @@ export default async (msg: IPassagem) => {
         "--disable-dev-shm-usage",
         "--disable-accelerated-2d-canvas",
         "--disable-gpu",
-        "--window-size=1920x1080",
+        "--window-size=1920x800",
       ],
     });
 
@@ -59,6 +59,7 @@ export default async (msg: IPassagem) => {
       timeout: 0,
     });
 
+    await page.setViewport({width: 1450, height: 900});
     await page.screenshot({ path });
     await browser.close();
 

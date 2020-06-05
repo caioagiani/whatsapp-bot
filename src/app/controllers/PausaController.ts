@@ -15,7 +15,7 @@ export default async (msg: ICompany) => {
   chat.sendStateTyping();
 
   if (contato == "5511987780238")
-    return msg.reply("*Papai* você não tira pausa, vai trabalhar!!!");
+    return msg.reply("🤖: *Papai* você não tira pausa, vai trabalhar!!!");
 
   const date = new Date(Date.now());
 
@@ -26,7 +26,7 @@ export default async (msg: ICompany) => {
 
     if (valores.numero == contato) {
       msg.reply(
-        `Boa pausa *${valores.nome}*, não se esqueça de voltar às *${retorno}h* ok?!!`
+        `🤖: Boa pausa *${valores.nome}*, não se esqueça de voltar às *${retorno}h* ok?!!`
       );
     }
   });

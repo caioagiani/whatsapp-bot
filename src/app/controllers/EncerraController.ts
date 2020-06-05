@@ -19,9 +19,9 @@ export default async (msg: ICompany) => {
   company.map((valores) => {
     if (valores.numero == contato) {
       if (date.getHours() < valores.fim) {
-        msg.reply(`Hey *${valores.nome}*, seu turno ainda não acabou!!!`);
+        msg.reply(`🤖: Hey *${valores.nome}*, seu turno ainda não acabou!!!`);
       } else {
-        msg.reply(`Bom descanso *${valores.nome}*, amanhã tem mais!!!`);
+        msg.reply(`🤖: Bom descanso *${valores.nome}*!`);
       }
     }
   });

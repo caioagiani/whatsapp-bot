@@ -4,6 +4,7 @@ import CompanyController from "./CompanyController";
 import GlobalController from "./GlobalController";
 import PausaController from "./PausaController";
 import EncerraController from "./EncerraController";
+import ZabbixController from "./ZabbixController";
 
 export {
   PassagemController,
@@ -12,4 +13,5 @@ export {
   GlobalController,
   PausaController,
   EncerraController,
+  ZabbixController
 };
