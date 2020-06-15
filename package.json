@@ -8,10 +8,6 @@
   ],
   "license": "MIT",
   "description": "WhatsApp Bot for 76Telecom",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/caioagiani"
-  },
   "author": {
     "name": "Caio Agiani",
     "email": "caio.agiani14@gmail.com",
