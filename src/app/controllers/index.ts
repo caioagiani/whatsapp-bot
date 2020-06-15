@@ -1,17 +1,11 @@
-import PassagemController from "./PassagemController";
-import EconomiaController from "./EconomiaController";
-import CompanyController from "./CompanyController";
-import GlobalController from "./GlobalController";
-import PausaController from "./PausaController";
-import EncerraController from "./EncerraController";
-import ZabbixController from "./ZabbixController";
+import NoticiasController from "./NoticiasController";
+import PrevencaoController from "./PrevencaoController";
+import AtendimentosController from "./AtendimentosController";
+import BeneficiosController from "./GlobalController";
 
 export {
-  PassagemController,
-  EconomiaController,
-  CompanyController,
-  GlobalController,
-  PausaController,
-  EncerraController,
-  ZabbixController
+  NoticiasController,
+  PrevencaoController,
+  AtendimentosController,
+  BeneficiosController
 };

@@ -1,43 +1,30 @@
 import { client } from "./server";
 
 import {
-  PassagemController,
-  EconomiaController,
-  CompanyController,
-  GlobalController,
-  PausaController,
-  EncerraController,
-  ZabbixController,
+  NoticiasController,
+  PrevencaoController,
+  AtendimentosController,
+  BeneficiosController,
 } from "./app/controllers";
 
 client.on("message", async (message: any) => {
   switch (message.body) {
-    case "!turno":
-      await PassagemController(message);
+    case "1 - Noticias":
+      await NoticiasController(message);
       break;
 
-    case "!company":
-      await CompanyController(message);
+    case "2 - Atendimentos":
+      await AtendimentosController(message);
       break;
 
-    case "!cotacao":
-      await EconomiaController(message);
+    case "3 - Prevenção":
+      await PrevencaoController(message);
       break;
 
-    case "!important":
-      await GlobalController(message);
+    case "4 - Benefícios":
+      await BeneficiosController(message);
       break;
 
-    case "!pausa":
-      await PausaController(message);
-      break;
-
-    case "!encerrar":
-      await EncerraController(message);
-      break;
       
-    case "!zabbix":
-      await ZabbixController(message);
-      break;
   }
 });
