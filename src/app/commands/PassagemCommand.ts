@@ -1,9 +1,10 @@
+import Command from "./Command";
+import HttpClient from "../infrastructure/HttpClient";
 import { client, MessageMedia } from "../../server";
 import { readFileSync } from "fs";
 
 import puppeteer from "puppeteer";
 import dir from "path";
-import request from "request";
 
 let commandExecute: boolean = false;
 
@@ -14,29 +15,37 @@ interface IPassagem {
   from: string;
 }
 
-export default async (msg: IPassagem) => {
-  const chat = await msg.getChat();
-  const user = await msg.getContact();
+export default class PassagemCommand extends Command<IPassagem> {
+  constructor(private readonly httpClient: HttpClient) {
+    super();
+  }
 
-  chat.sendStateTyping();
+  async execute(msg: IPassagem) {
+    const chat = await msg.getChat();
+    const user = await msg.getContact();
 
-  if (commandExecute)
-    return msg.reply("🤖: existe um processo em execução, por favor aguarde...");
+    chat.sendStateTyping();
 
-  msg.reply(
-    `🤖: @${user.id.user}, gerando passagem de *turno*, aguarde...`
-  );
+    if (commandExecute) {
+      msg.reply("🤖: existe um processo em execução, por favor aguarde...");
+      return;
+    }
 
-  commandExecute = true;
+    msg.reply(`🤖: @${user.id.user}, gerando passagem de *turno*, aguarde...`);
 
-  const options: { method: string; url: string } = {
-    method: "GET",
-    url: process.env?.TURNO_API,
-  };
+    commandExecute = true;
 
-  request(options, async (error: any, response: any, body: string) => {
-    if (error ?? response.statusCode !== 200)
-      return msg.reply("Este comando não está habilitado.");
+    const url = process.env?.TURNO_API;
+
+    const response = await this.httpClient.get<{
+      total: string;
+      chamados: any[];
+    }>(url);
+
+    if (response.statusCode !== 200) {
+      msg.reply("Este comando não está habilitado.");
+      return;
+    }
 
     const browser = await puppeteer.launch({
       headless: true,
@@ -59,11 +68,11 @@ export default async (msg: IPassagem) => {
       timeout: 0,
     });
 
-    await page.setViewport({width: 1450, height: 900});
+    await page.setViewport({ width: 1450, height: 900 });
     await page.screenshot({ path });
     await browser.close();
 
-    const { total, chamados } = JSON.parse(body);
+    const { total, chamados } = response.body;
 
     const row = (protocol: { fila?: string; value?: string }) => {
       return `${protocol.fila}: *${protocol.value}*`;
@@ -84,12 +93,12 @@ export default async (msg: IPassagem) => {
     const media = new MessageMedia(
       "image/png",
       readFileSync(path, "base64"),
-      "passagem_automatica_bot.png"
+      "passagem_automatica_bot.png",
     );
 
     commandExecute = false;
     // msg.reply(mensagem);
     client.sendMessage(msg.from, mensagem);
     client.sendMessage(msg.from, media);
-  });
-};
+  }
+}

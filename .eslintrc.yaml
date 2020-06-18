@@ -1,4 +1,7 @@
-extends: airbnb-base
+extends:
+  - airbnb-base
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
 env:
   node: true
   mocha: true
@@ -8,3 +11,5 @@ parserOptions:
   sourceType: module
   ecmaFeatures:
     modules: true
+plugins:
+  - @typescript-eslint
