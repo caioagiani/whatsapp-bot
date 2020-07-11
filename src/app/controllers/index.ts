@@ -1,17 +1,7 @@
-import PassagemController from "./PassagemController";
-import EconomiaController from "./EconomiaController";
-import CompanyController from "./CompanyController";
-import GlobalController from "./GlobalController";
-import PausaController from "./PausaController";
-import EncerraController from "./EncerraController";
-import ZabbixController from "./ZabbixController";
-
-export {
-  PassagemController,
-  EconomiaController,
-  CompanyController,
-  GlobalController,
-  PausaController,
-  EncerraController,
-  ZabbixController
-};
+export { default as PassagemController } from "./PassagemController";
+export { default as EconomiaController } from "./EconomiaController";
+export { default as CompanyController } from "./CompanyController";
+export { default as GlobalController } from "./GlobalController";
+export { default as PausaController } from "./PausaController";
+export { default as EncerraController } from "./EncerraController";
+export { default as ZabbixController } from "./ZabbixController";

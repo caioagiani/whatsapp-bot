@@ -1,4 +1,4 @@
-import { client, MessageMedia } from "../../server";
+import { client } from "../../server";
 import { company } from "../../config/integrantes.json";
 
 interface ICompany {

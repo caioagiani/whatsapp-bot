@@ -1,8 +1,8 @@
 import { client, MessageMedia } from "../../server";
 import { readFileSync } from "fs";
 
-import puppeteer from "puppeteer";
-import dir from "path";
+import { launch } from "puppeteer";
+import { resolve } from "path";
 import request from "request";
 
 let commandExecute: boolean = false;
@@ -21,11 +21,11 @@ export default async (msg: IPassagem) => {
   chat.sendStateTyping();
 
   if (commandExecute)
-    return msg.reply("🤖: existe um processo em execução, por favor aguarde...");
+    return msg.reply(
+      "🤖: existe um processo em execução, por favor aguarde..."
+    );
 
-  msg.reply(
-    `🤖: @${user.id.user}, gerando passagem de *turno*, aguarde...`
-  );
+  msg.reply(`🤖: @${user.id.user}, gerando passagem de *turno*, aguarde...`);
 
   commandExecute = true;
 
@@ -38,7 +38,7 @@ export default async (msg: IPassagem) => {
     if (error ?? response.statusCode !== 200)
       return msg.reply("Este comando não está habilitado.");
 
-    const browser = await puppeteer.launch({
+    const browser = await launch({
       headless: true,
       args: [
         "--start-maximized",
@@ -52,14 +52,14 @@ export default async (msg: IPassagem) => {
     });
 
     const page = await browser.newPage();
-    const path = dir.resolve("public", "images", "turno.png");
+    const path = resolve("public", "images", "turno.png");
 
     await page.goto(process.env.PRINT_URL, {
       waitUntil: "load",
       timeout: 0,
     });
 
-    await page.setViewport({width: 1450, height: 900});
+    await page.setViewport({ width: 1450, height: 900 });
     await page.screenshot({ path });
     await browser.close();
 
@@ -88,7 +88,7 @@ export default async (msg: IPassagem) => {
     );
 
     commandExecute = false;
-    // msg.reply(mensagem);
+
     client.sendMessage(msg.from, mensagem);
     client.sendMessage(msg.from, media);
   });

@@ -1,9 +1,8 @@
 import { client, MessageMedia } from "../../server";
 import { readFileSync } from "fs";
 
-import puppeteer from "puppeteer";
-import dir from "path";
-import request from "request";
+import { launch } from "puppeteer";
+import { resolve } from "path";
 
 let commandExecute: boolean = false;
 
@@ -21,15 +20,15 @@ export default async (msg: IPassagem) => {
   chat.sendStateTyping();
 
   if (commandExecute)
-    return msg.reply("🤖: existe um processo em execução, por favor aguarde...");
+    return msg.reply(
+      "🤖: existe um processo em execução, por favor aguarde..."
+    );
 
-  msg.reply(
-    `🤖: @${user.id.user}, coletando informações do *Zabbix*...`
-  );
+  msg.reply(`🤖: @${user.id.user}, coletando informações do *Zabbix*...`);
 
   commandExecute = true;
 
-  const browser = await puppeteer.launch({
+  const browser = await launch({
     headless: true,
     args: [
       "--start-maximized",
@@ -43,21 +42,17 @@ export default async (msg: IPassagem) => {
   });
 
   const page = await browser.newPage();
-  const path = dir.resolve("public", "images", "zabbix.png");
+  const path = resolve("public", "images", "zabbix.png");
 
   await page.goto(process.env.ZABBIX_URL, {
     waitUntil: "load",
     timeout: 0,
   });
 
-  await page.setViewport({width: 1150, height: 800});
+  await page.setViewport({ width: 1150, height: 800 });
   await page.waitFor(2000);
   await page.screenshot({ path });
   await browser.close();
-
-  const row = (protocol: { fila?: string; value?: string }) => {
-    return `${protocol.fila}: *${protocol.value}*`;
-  };
 
   const media = new MessageMedia(
     "image/png",
@@ -66,6 +61,6 @@ export default async (msg: IPassagem) => {
   );
 
   commandExecute = false;
-  // msg.reply(mensagem);
+
   client.sendMessage(msg.from, media);
 };

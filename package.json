@@ -35,20 +35,17 @@
     "compile": "tsc -w"
   },
   "dependencies": {
-    "@types/express": "^4.17.6",
-    "eslint-config-airbnb": "^18.1.0",
     "express": "^4.17.1",
     "puppeteer": "^3.0.4",
     "qr-image": "^3.2.0",
     "qrcode-terminal": "^0.12.0",
     "request": "^2.88.2",
-    "whatsapp-web.js": "^1.6.0"
+    "whatsapp-web.js": "^1.7.0"
   },
   "devDependencies": {
     "@types/puppeteer": "^2.1.0",
     "@types/request": "^2.48.5",
     "dotenv": "^8.2.0",
-    "nodemon": "^2.0.4",
-    "typescript-eslint-parser": "^22.0.0"
+    "nodemon": "^2.0.4"
   }
 }
