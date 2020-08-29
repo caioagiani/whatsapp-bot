@@ -7,7 +7,7 @@
     "bot"
   ],
   "license": "MIT",
-  "description": "WhatsApp Bot for 76Telecom",
+  "description": "WhatsApp Bot",
   "repository": {
     "type": "git",
     "url": "https://github.com/caioagiani"
@@ -35,16 +35,16 @@
     "compile": "tsc -w"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "express": "^4.17.1",
     "puppeteer": "^3.0.4",
     "qr-image": "^3.2.0",
     "qrcode-terminal": "^0.12.0",
-    "request": "^2.88.2",
-    "whatsapp-web.js": "^1.7.0"
+    "whatsapp-web.js": "^1.8.0"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/puppeteer": "^2.1.0",
-    "@types/request": "^2.48.5",
     "dotenv": "^8.2.0",
     "nodemon": "^2.0.4"
   }
