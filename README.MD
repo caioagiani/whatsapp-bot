@@ -21,13 +21,6 @@ Esta aplicação é um Client que simula a conexão com WhatsApp Web através do
 
 ### ▶ Instação:
 
-- Variável ambiente: `.env.example`:
-
-```java
-TURNO_API=private
-PRINT_URL=private
-```
-
 - Instalar TypeScript Global `npm i -g typescript`
 - Instalar dependências: `yarn install` ou `npm install`
 - Compilar TypeScript: `yarn compile` ou `npm run compile`
@@ -48,7 +41,7 @@ Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso
 - !turno
 - !pausa
 - !encerrar
-- !important
+- !mencionar
 
 Digite: `!cotacao` e o Bot consumirá a <a href="https://docs.awesomeapi.com.br/">API</a> de cotação das seguintes moedas: (BTC, DOLAR, EURO)
 
@@ -56,7 +49,7 @@ Digite: `!cotacao` e o Bot consumirá a <a href="https://docs.awesomeapi.com.br/
 
 ---
 
-Digite: `!turno` e o Bot consumirá uma API própria, onde colhe recursos internos da empresa 76Telecom.
+Digite: `!turno` e o Bot consumirá uma API própria.
 
 <img width="600" height="100%" src="https://i.imgur.com/XtZA3ha.png" alt="Passagem de turno">
 
@@ -76,6 +69,12 @@ Digite: `!pausa` e o Bot enviará uma mensagem com o tempo que você deverá ret
 
 ---
 
+Digite: `!mencionar` o Bot irá marcar todos os integrantes do grupo.
+
+<img width="600" height="100%" src="https://i.imgur.com/yvJbqNA.png" alt="Mencionar">
+
+---
+
 ### Isenção de Responsabilidade
 
 Este projeto não é afiliado, associado, autorizado, endossado por, ou de qualquer forma oficialmente conectado com o WhatsApp ou qualquer uma de suas subsidiárias ou suas afiliadas. O site oficial do WhatsApp pode ser encontrado em https://whatsapp.com. "WhatsApp" bem como nomes, marcas, emblemas e imagens relacionadas são marcas registradas de seus respectivos proprietários.
@@ -86,7 +85,6 @@ Este projeto não é afiliado, associado, autorizado, endossado por, ou de qualq
 
 - [@pedroslopez](https://github.com/pedroslopez)
 - [@raniellyferreira](https://github.com/raniellyferreira)
-- [@76Telecom](https://76telecom.com.br/)
 
 ---
 
