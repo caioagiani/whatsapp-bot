@@ -42,14 +42,15 @@ Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso
 - !pausa
 - !encerrar
 - !mencionar
+- !cep <cep>
 
-Digite: `!cotacao` e o Bot consumirá a <a href="https://docs.awesomeapi.com.br/">API</a> de cotação das seguintes moedas: (BTC, DOLAR, EURO)
+Digite: `!cotacao` e o Bot consumirá a <a href="https://docs.awesomeapi.com.br/">API</a> de cotação das seguintes moedas: (BTC, DOLAR, EURO):
 
 <img width="600" height="100%" src="https://i.imgur.com/qrqWQ6N.png" alt="Cotação da moeda">
 
 ---
 
-Digite: `!turno` e o Bot consumirá uma API própria.
+Digite: `!turno` e o Bot consumirá uma API própria:
 
 <img width="600" height="100%" src="https://i.imgur.com/XtZA3ha.png" alt="Passagem de turno">
 
@@ -57,21 +58,27 @@ Comando **!turno** é de uso exclusivo, não funcionará para uso público, isso
 
 ---
 
-Digite: `!encerrar` e o Bot encerra o seu expediente de acordo com seu horário.
+Digite: `!encerrar` e o Bot encerra o seu expediente de acordo com seu horário:
 
 <img width="600" height="100%" src="https://i.imgur.com/EL9l6UN.png" alt="Encerrar jornada">
 
 ---
 
-Digite: `!pausa` e o Bot enviará uma mensagem com o tempo que você deverá retornar.
+Digite: `!pausa` e o Bot enviará uma mensagem com o tempo que você deverá retornar:
 
 <img width="600" height="100%" src="https://i.imgur.com/0xIpYYw.png" alt="Pausa jornada">
 
 ---
 
-Digite: `!mencionar` o Bot irá marcar todos os integrantes do grupo.
+Digite: `!mencionar` para marcar todos os integrantes do grupo:
 
 <img width="600" height="100%" src="https://i.imgur.com/yvJbqNA.png" alt="Mencionar">
+
+---
+
+Digite: `!cep <cep>` para consultar o cep:
+
+<img width="600" height="100%" src="https://i.imgur.com/GXV02qi.png" alt="Consulta CEP">
 
 ---
 
