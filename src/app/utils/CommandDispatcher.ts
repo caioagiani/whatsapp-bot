@@ -8,11 +8,15 @@ export default class CommandDispatcher {
   }
 
   async dispatch(name: string, message: any) {
-    if (!this.commandsHandlers.has(name)) {
-      return;
-    }
+    for (var [key, value] of this.commandsHandlers) {
+      if (name.includes(key)) {
+        if (!this.commandsHandlers.has(key)) {
+          return;
+        }
 
-    const command = this.commandsHandlers.get(name);
-    await command.execute(message);
+        const command = this.commandsHandlers.get(key);
+        await command.execute(message);
+      }
+    }
   }
 }
