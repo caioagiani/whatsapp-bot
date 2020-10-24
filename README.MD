@@ -4,12 +4,12 @@
 
 <h3 align="center">Bot WhatsApp - NodeJS TypeScript</h3>
 
-<div align="center">
-  
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
-
-</div>
+<p align="center">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/caioagiani/whatsapp-bot">
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/caioagiani/whatsapp-bot">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/caioagiani/whatsapp-bot">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/caioagiani/whatsapp-bot">
+</p>
 
 ---
 
