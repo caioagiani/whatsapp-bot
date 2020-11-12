@@ -19,14 +19,14 @@ Esta aplicação é um Client que simula a conexão com WhatsApp Web através do
 
 ---
 
-### ▶ Instação:
+### ▶ Instalação:
 
 - Instalar TypeScript Global `npm i -g typescript`
 - Instalar dependências: `yarn install` ou `npm install`
 - Compilar TypeScript: `yarn compile` ou `npm run compile`
 - Iniciar aplicação: `yarn dev` ou `npm run dev`.
 
-Caso dê algum erro com a depedência Puppeteer, utilize: `npm install --global --unsafe-perm puppeteer`
+Caso dê algum erro com a depedência Puppeteer, utilize: `sudo npm install -g puppeteer --unsafe-perm=true`
 
 Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso, basta escanear o QR Code em seu terminal:
 
