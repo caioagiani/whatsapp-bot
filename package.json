@@ -1,13 +1,20 @@
 {
-  "name": "wpp-bot",
-  "main": "dist/index.js",
-  "version": "0.2.0",
+  "name": "whatsapp-web-bot",
+  "main": "src/index.ts",
+  "description": "WhatsApp Bot",
+  "version": "0.2.2",
+  "license": "MIT",
   "keywords": [
     "whatsapp",
-    "bot"
+    "whatsapp-web",
+    "api",
+    "bot",
+    "client",
+    "node"
   ],
-  "license": "MIT",
-  "description": "WhatsApp Bot",
+  "bugs": {
+    "url": "https://github.com/caioagiani/whatsapp-bot/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/caioagiani"
@@ -30,9 +37,7 @@
     }
   ],
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "nodemon -r dotenv/config dist/index.js",
-    "compile": "tsc -w"
+    "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --ignore-watch src/data -r dotenv/config src/index.ts"
   },
   "dependencies": {
     "axios": "^0.20.0",
@@ -40,12 +45,21 @@
     "puppeteer": "^3.0.4",
     "qr-image": "^3.2.0",
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.10.0"
+    "whatsapp-web.js": "^1.11.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/puppeteer": "^2.1.0",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
     "dotenv": "^8.2.0",
-    "nodemon": "^2.0.4"
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.5",
+    "prettier": "^2.0.5",
+    "ts-node-dev": "^1.0.0",
+    "typescript": "^4.0.2"
   }
 }

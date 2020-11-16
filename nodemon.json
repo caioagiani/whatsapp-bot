@@ -1,7 +1,0 @@
-{
-  "ignore": [".git", "public/images/**", "src/data/**", "node_modules/**"],
-  "env": {
-    "NODE_ENV": "development"
-  },
-  "ext": "js json"
-}

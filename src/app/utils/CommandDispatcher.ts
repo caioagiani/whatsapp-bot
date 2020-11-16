@@ -1,4 +1,4 @@
-import Command from "./Command";
+import Command from './Command';
 
 export default class CommandDispatcher {
   private commandsHandlers: Map<string, Command<any>> = new Map();
@@ -8,7 +8,7 @@ export default class CommandDispatcher {
   }
 
   async dispatch(name: string, message: any) {
-    for (var [key, value] of this.commandsHandlers) {
+    for (const [key, _] of this.commandsHandlers) {
       if (name.includes(key)) {
         if (!this.commandsHandlers.has(key)) {
           return;

@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios from 'axios';
+import { IMessage } from '../interfaces/Message';
 
 interface IResponse {
   data: IServerData;
@@ -17,8 +18,8 @@ export default class EconomyCommand {
     this.cep = cep;
   }
 
-  async execute(msg: any) {
-    const [_, setCep] = this.cep.split(" ");
+  async execute(msg: IMessage) {
+    const [_, setCep] = this.cep.split(' ');
 
     const chat = await msg.getChat();
 

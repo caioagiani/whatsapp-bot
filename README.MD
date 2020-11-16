@@ -21,10 +21,19 @@ Esta aplicação é um Client que simula a conexão com WhatsApp Web através do
 
 ### ▶ Instalação:
 
-- Instalar TypeScript Global `npm i -g typescript`
-- Instalar dependências: `yarn install` ou `npm install`
-- Compilar TypeScript: `yarn compile` ou `npm run compile`
-- Iniciar aplicação: `yarn dev` ou `npm run dev`.
+```bash
+# Baixar projeto
+$ git clone git@github.com:caioagiani/whatsapp-bot.git
+
+# Instalar TypeScript Global
+$ npm i -g typescript
+
+# Instalar dependências
+$ yarn install ou npm install
+
+# Iniciar aplicação
+$ yarn dev ou npm run dev
+```
 
 Caso dê algum erro com a depedência Puppeteer, utilize: `sudo npm install -g puppeteer --unsafe-perm=true`
 

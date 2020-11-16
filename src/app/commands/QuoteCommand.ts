@@ -1,37 +1,32 @@
-import { client } from "../../server";
-import { company } from "../../config/integrantes.json";
-
-interface ICompany {
-  id: { participant: any };
-  getChat: () => any;
-  getContact: () => any;
-  reply: (arg0: string) => void;
-}
+import { client } from '../../server';
+import { company } from '../../config/integrantes.json';
+import { IMessage } from '../interfaces/Message';
 
 export default class QuoteCommand {
-  async execute(msg: ICompany) {
+  async execute(msg: IMessage) {
     const chat = await msg.getChat();
     const user = await msg.getContact();
-    const contato = user.id.user;
+
+    const { user: contato } = user.id;
 
     chat.sendStateTyping();
 
     if (!chat.isGroup) {
-      return msg.reply("Comando apenas para grupos!");
+      return msg.reply('Comando apenas para grupos!');
     }
 
     company.map(async (valores) => {
       if (valores.numero == contato) {
         if (!valores.admin) {
           return msg.reply(
-            "Ops, você não tem permissão para executar este comando!"
+            'Ops, você não tem permissão para executar este comando!'
           );
         }
 
-        let text = "";
-        let mentions = [];
+        let text = '';
+        const mentions = [];
 
-        for (let participant of chat.participants) {
+        for (const participant of chat.participants) {
           const contact = await client.getContactById(
             participant.id._serialized
           );
