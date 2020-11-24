@@ -1,54 +1,50 @@
-import { Client, MessageMedia } from "whatsapp-web.js";
-import qrcode from "qrcode-terminal";
-import fs from "fs";
-import dir from "path";
+import { Client, MessageMedia } from 'whatsapp-web.js';
+import qrcode from 'qrcode-terminal';
+import fs from 'fs';
+import dir from 'path';
 
 interface INotification {
   reply: (args: string) => void;
   recipientIds: any[];
 }
 
-const sessionFile = dir.resolve("src", "data", "session.json");
+const sessionFile = dir.resolve('src', 'data', 'session.json');
 
-const sessionData: any = fs.existsSync(sessionFile)
-  ? require(sessionFile)
-  : null;
+const session = fs.existsSync(sessionFile) ? require(sessionFile) : null;
 
-const client = new Client({
-  session: sessionData,
-});
+const client = new Client({ session });
 
-client.on("qr", (qr: string) => {
+client.on('qr', (qr: string) => {
   qrcode.generate(qr, { small: true });
 });
 
-client.on("authenticated", (session: any) => {
+client.on('authenticated', (session: any) => {
   fs.writeFile(sessionFile, JSON.stringify(session), (err) => {
     if (err) console.log(err);
   });
 });
 
-client.on("ready", () => {
-  console.log("WhatsApp bot conectado com sucesso!");
+client.on('ready', () => {
+  console.log('WhatsApp bot conectado com sucesso!');
 });
 
-client.on("auth_failure", () => {
+client.on('auth_failure', () => {
   fs.unlink(sessionFile, () =>
-    console.log("Autenticação falhou, tente novamente.")
+    console.log('Autenticação falhou, tente novamente.')
   );
 });
 
-client.on("disconnected", () => {
+client.on('disconnected', () => {
   fs.unlink(sessionFile, () =>
-    console.log("Sessão WhatsApp perdeu a conexão.")
+    console.log('Sessão WhatsApp perdeu a conexão.')
   );
 });
 
-client.on("group_join", (notification: INotification) => {
+client.on('group_join', (notification: INotification) => {
   notification.reply(`${notification.recipientIds[0]} entrou no grupo.`);
 });
 
-client.on("group_leave", (notification: INotification) => {
+client.on('group_leave', (notification: INotification) => {
   notification.reply(`${notification.recipientIds[0]} saiu do grupo.`);
 });
 

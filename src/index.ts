@@ -1,43 +1,16 @@
-import { client } from "./server";
+import { client } from './server';
+import { EconomyCommand, QuoteCommand, CepCommand } from './app/commands';
+import CommandDispatcher from './app/utils/CommandDispatcher';
+import { IMessage } from './app/interfaces/Message';
 
-import {
-  PassagemController,
-  EconomiaController,
-  CompanyController,
-  GlobalController,
-  PausaController,
-  EncerraController,
-  ZabbixController,
-} from "./app/controllers";
+const dispatcher = new CommandDispatcher();
 
-client.on("message", async (message: any) => {
-  switch (message.body) {
-    case "!turno":
-      await PassagemController(message);
-      break;
+client.on('message', async (message: IMessage) => {
+  dispatcher.register('cotacao', new EconomyCommand());
+  dispatcher.register('mencionar', new QuoteCommand());
+  dispatcher.register('cep', new CepCommand(message.body));
 
-    case "!company":
-      await CompanyController(message);
-      break;
-
-    case "!cotacao":
-      await EconomiaController(message);
-      break;
-
-    case "!important":
-      await GlobalController(message);
-      break;
-
-    case "!pausa":
-      await PausaController(message);
-      break;
-
-    case "!encerrar":
-      await EncerraController(message);
-      break;
-      
-    case "!zabbix":
-      await ZabbixController(message);
-      break;
+  if (message.body.startsWith('!')) {
+    dispatcher.dispatch(message.body.slice(1), message);
   }
 });

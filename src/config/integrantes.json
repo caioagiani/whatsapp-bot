@@ -1,15 +1,15 @@
 {
-    "company": [
-        {
-            "admin": true,
-            "cargo": "Analista - BOT MANAGER",
-            "nome": "Caio Henrique",
-            "numero": "5511999865802",
-            "ramal": "4507",
-            "inicio": 13,
-            "pausa": 60,
-            "fim": 22,
-            "expediente": false
-        }
-      ]
+  "company": [
+    {
+      "admin": true,
+      "cargo": "Analista - BOT MANAGER",
+      "nome": "Caio Henrique",
+      "numero": "5511999865802",
+      "ramal": "4507",
+      "inicio": 13,
+      "pausa": 60,
+      "fim": 22,
+      "expediente": false
+    }
+  ]
 }

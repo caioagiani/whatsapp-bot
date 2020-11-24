@@ -1,8 +1,6 @@
 dist
 node_modules
 
-.env
-
 yarn.lock
 
 public/images/*
