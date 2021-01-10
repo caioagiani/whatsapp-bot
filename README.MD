@@ -51,7 +51,14 @@ Após configuração, necessário atrelar aplicação ao seu WhatsApp, para isso
 - !pausa
 - !encerrar
 - !mencionar
-- !cep <cep>
+- !cep 01407100
+- !perfil @contato
+
+Digite: `!perfil <@contato>` para baixar a foto avatar:
+
+<img width="600" height="100%" src="https://i.imgur.com/wLrW7yE.png" alt="Perfil">
+
+---
 
 Digite: `!cotacao` e o Bot consumirá a <a href="https://docs.awesomeapi.com.br/">API</a> de cotação das seguintes moedas: (BTC, DOLAR, EURO):
 
