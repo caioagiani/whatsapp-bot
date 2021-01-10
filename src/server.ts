@@ -12,7 +12,12 @@ const sessionFile = dir.resolve('src', 'data', 'session.json');
 
 const session = fs.existsSync(sessionFile) ? require(sessionFile) : null;
 
-const client = new Client({ session });
+const client = new Client({
+  puppeteer: {
+    headless: true,
+  },
+  session,
+});
 
 client.on('qr', (qr: string) => {
   qrcode.generate(qr, { small: true });
@@ -24,8 +29,12 @@ client.on('authenticated', (session: any) => {
   });
 });
 
-client.on('ready', () => {
+client.on('ready', async () => {
   console.log('WhatsApp bot conectado com sucesso!');
+
+  const { pushname } = client.info;
+
+  client.sendMessage('5511987454933@c.us', `[${pushname}] - WhatsApp Online`);
 });
 
 client.on('auth_failure', () => {
