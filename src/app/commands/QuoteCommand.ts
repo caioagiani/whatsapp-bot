@@ -1,10 +1,10 @@
 import { client } from '../../server';
 import { company } from '../../config/integrantes.json';
-import { IMessage } from '../interfaces/Message';
+import type { Message, GroupChat } from 'whatsapp-web.js';
 
 export default class QuoteCommand {
-  async execute(msg: IMessage) {
-    const chat = await msg.getChat();
+  async execute(msg: Message) {
+    const chat: GroupChat = (await msg.getChat()) as any;
     const user = await msg.getContact();
 
     const { user: contato } = user.id;
