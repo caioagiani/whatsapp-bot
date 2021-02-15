@@ -15,6 +15,7 @@ const session = fs.existsSync(sessionFile) ? require(sessionFile) : null;
 const client = new Client({
   puppeteer: {
     headless: true,
+    args: ['--no-sandbox'],
   },
   session,
 });
@@ -38,14 +39,15 @@ client.on('ready', async () => {
 });
 
 client.on('auth_failure', () => {
-  fs.unlink(sessionFile, () =>
-    console.log('Autenticação falhou, tente novamente.')
-  );
+  fs.unlink(sessionFile, () => {
+    console.log('Autenticação falhou, tente novamente.');
+    process.exit(1);
+  });
 });
 
 client.on('disconnected', () => {
   fs.unlink(sessionFile, () =>
-    console.log('Sessão WhatsApp perdeu a conexão.')
+    console.log('Sessão WhatsApp perdeu a conexão, tente novamente.')
   );
 });
 
