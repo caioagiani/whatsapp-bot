@@ -31,6 +31,6 @@ export default class ProfileCommand {
 
     const media = new MessageMedia('image/png', image, `${contact.number}.png`);
 
-    client.sendMessage(msg.from, media);
+    return client.sendMessage(msg.from, media);
   }
 }

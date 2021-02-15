@@ -16,7 +16,7 @@ export default class EconomyCommand {
       return `\n💲 *${currency.name} (${currency.code})* \nValor atual: R$ ${currency.bid} \nValor mais alto: R$ ${currency.high} \nValor mais baixo: R$ ${currency.low}\n`;
     };
 
-    msg.reply(
+    return msg.reply(
       `Cotação atual: 💎💰🤑💹 \n${type(data.USD)} ${type(data.EUR)} ${type(
         data.BTC
       )}`
