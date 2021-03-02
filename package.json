@@ -49,7 +49,7 @@
     "axios": "^0.21.1",
     "express": "^4.17.1",
     "node-base64-image": "^2.0.1",
-    "puppeteer": "^3.0.4",
+    "puppeteer": "^8.0.0",
     "qr-image": "^3.2.0",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.12.4"
