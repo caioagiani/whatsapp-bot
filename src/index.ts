@@ -1,22 +1,28 @@
-import { client } from './server';
+import { client } from './services/whatsapp';
 import {
   EconomyCommand,
   QuoteCommand,
   CepCommand,
   ProfileCommand,
+  SmsCommand,
 } from './app/commands';
-import CommandDispatcher from './app/utils/CommandDispatcher';
+import { commandDispatcher } from './app/utils/CommandDispatcher';
 import type { Message } from 'whatsapp-web.js';
 
-const dispatcher = new CommandDispatcher();
+client.on('message', (message: Message) => {
+  const economyCommand = new EconomyCommand();
+  const quoteCommand = new QuoteCommand();
+  const cepCommand = new CepCommand(message.body);
+  const profileCommand = new ProfileCommand(message.body);
+  const smsCommand = new SmsCommand(message.body);
 
-client.on('message', async (message: Message) => {
-  dispatcher.register('cotacao', new EconomyCommand());
-  dispatcher.register('mencionar', new QuoteCommand());
-  dispatcher.register('cep', new CepCommand(message.body));
-  dispatcher.register('perfil', new ProfileCommand(message.body));
+  commandDispatcher.register('cotacao', economyCommand);
+  commandDispatcher.register('mencionar', quoteCommand);
+  commandDispatcher.register('cep', cepCommand);
+  commandDispatcher.register('perfil', profileCommand);
+  commandDispatcher.register('sms', smsCommand);
 
   if (message.body.startsWith('!')) {
-    dispatcher.dispatch(message.body.slice(1), message);
+    commandDispatcher.dispatch(message.body.slice(1), message);
   }
 });

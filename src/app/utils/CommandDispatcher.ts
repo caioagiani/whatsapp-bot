@@ -1,6 +1,6 @@
 import Command from './Command';
 
-export default class CommandDispatcher {
+class CommandDispatcher {
   private commandsHandlers: Map<string, Command<any>> = new Map();
 
   async register(name: string, command: Command<any>) {
@@ -20,3 +20,5 @@ export default class CommandDispatcher {
     }
   }
 }
+
+export const commandDispatcher = new CommandDispatcher();

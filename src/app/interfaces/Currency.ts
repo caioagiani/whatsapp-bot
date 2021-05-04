@@ -1,4 +1,4 @@
-interface ICurrency {
+export interface ICurrency {
   code: string;
   codein: string;
   name: string;
@@ -11,5 +11,3 @@ interface ICurrency {
   timestamp: string;
   create_date: string;
 }
-
-export { ICurrency };
