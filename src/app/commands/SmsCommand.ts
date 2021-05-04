@@ -1,6 +1,5 @@
-import { client, MessageMedia } from '../../services/whatsapp';
-import { encode } from 'node-base64-image';
 import type { Message } from 'whatsapp-web.js';
+import mobizon from '../../services/mobizon';
 
 export default class ProfileCommand {
   mention: string;
@@ -21,16 +20,16 @@ export default class ProfileCommand {
 
     if (!contact) return msg.reply('Contato não localizado.');
 
-    msg.reply('Stalkeando este contato...');
+    const sendSms = await mobizon.sendSms({
+      recipient: contact.number,
+      from: '',
+      text: 'Sms enviado via BOT.',
+    });
 
-    const url_i = await client.getProfilePicUrl(contact.number);
+    if (sendSms.code !== 0) {
+      return msg.reply('Oops, houve um erro ao enviar SMS, tente novamente.');
+    }
 
-    if (!url_i) return msg.reply('Imagem não foi localizada.');
-
-    const image: any = await encode(url_i, { string: true });
-
-    const media = new MessageMedia('image/png', image, `${contact.number}.png`);
-
-    return client.sendMessage(msg.from, media);
+    return msg.reply('SMS enviado com sucesso!');
   }
 }

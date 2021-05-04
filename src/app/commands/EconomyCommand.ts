@@ -9,7 +9,7 @@ export default class EconomyCommand {
     chat.sendStateTyping();
 
     const { data } = await axios.get(
-      'https://economia.awesomeapi.com.br/all/USD-BRL,BTC-BRL,EUR-BRL'
+      'https://economia.awesomeapi.com.br/all/USD-BRL,BTC-BRL,EUR-BRL',
     );
 
     const type = (currency: ICurrency) => {
@@ -18,8 +18,8 @@ export default class EconomyCommand {
 
     return msg.reply(
       `Cotação atual: 💎💰🤑💹 \n${type(data.USD)} ${type(data.EUR)} ${type(
-        data.BTC
-      )}`
+        data.BTC,
+      )}`,
     );
   }
 }

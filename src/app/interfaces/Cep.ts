@@ -1,13 +1,11 @@
-interface IResponse {
+export interface IResponse {
   data: IServerData;
 }
 
-interface IServerData {
+export interface IServerData {
   cep: string;
   state: string;
   city: string;
   neighborhood: string;
   street: string;
 }
-
-export { IResponse, IServerData };
