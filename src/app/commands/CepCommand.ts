@@ -13,7 +13,7 @@ export default class EconomyCommand {
 
     const chat = await msg.getChat();
 
-    chat.sendStateTyping();
+    await chat.sendStateTyping();
 
     try {
       const { data }: IResponse = await axios.get<IServerData>(
@@ -24,7 +24,7 @@ export default class EconomyCommand {
         `*CEP*: ${data.cep}\n*Logradouro*: ${data.street}\n*Cidade*: ${data.city}\n*Bairro*: ${data.neighborhood}\n*UF*: ${data.state}`,
       );
     } catch (error) {
-      return msg.reply(`CEP não localizado!`);
+      return msg.reply('CEP não localizado!');
     }
   }
 }

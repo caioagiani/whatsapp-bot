@@ -12,7 +12,7 @@ export default class ProfileCommand {
 
     const [contact] = await msg.getMentions();
 
-    chat.sendStateTyping();
+    await chat.sendStateTyping();
 
     if (!chat.isGroup) {
       return msg.reply('Comando apenas para grupos!');
