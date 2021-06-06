@@ -12,3 +12,5 @@ src/data/session.json
 !src/data/.gitkeep
 
 src/config/integrantes.json
+
+.idea
