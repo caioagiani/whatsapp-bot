@@ -2,7 +2,7 @@
   "name": "whatsapp-web-bot",
   "main": "src/index.ts",
   "description": "WhatsApp Bot",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "license": "MIT",
   "keywords": [
     "whatsapp",
@@ -48,26 +48,22 @@
   "dependencies": {
     "@types/node": "^15.0.1",
     "axios": "^0.21.1",
-    "express": "^4.17.1",
     "mobizon-node": "^0.3.1",
     "node-base64-image": "^2.0.1",
-    "puppeteer": "^8.0.0",
-    "qr-image": "^3.2.0",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.12.6"
   },
   "devDependencies": {
     "@types/axios": "0.14.0",
-    "@types/puppeteer": "5.4.3",
-    "@typescript-eslint/eslint-plugin": "4.22.1",
-    "@typescript-eslint/parser": "4.22.1",
-    "dotenv": "8.2.0",
-    "eslint": "7.25.0",
+    "@typescript-eslint/eslint-plugin": "4.26.0",
+    "@typescript-eslint/parser": "4.26.0",
+    "dotenv": "10.0.0",
+    "eslint": "7.28.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-loader": "4.0.2",
     "eslint-plugin-prettier": "3.4.0",
-    "prettier": "2.2.1",
+    "prettier": "2.3.1",
     "ts-node-dev": "1.1.6",
-    "typescript": "4.2.4"
+    "typescript": "4.3.2"
   }
 }

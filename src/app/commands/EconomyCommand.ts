@@ -6,7 +6,7 @@ export default class EconomyCommand {
   async execute(msg: Message) {
     const chat = await msg.getChat();
 
-    chat.sendStateTyping();
+    await chat.sendStateTyping();
 
     const { data } = await axios.get(
       'https://economia.awesomeapi.com.br/all/USD-BRL,BTC-BRL,EUR-BRL',
