@@ -1,23 +1,20 @@
 import { commandDispatcher } from '../utils/CommandDispatcher';
+import { Message } from 'whatsapp-web.js';
 
-import EconomyCommand from './EconomyCommand';
-import QuoteCommand from './QuoteCommand';
+import { EconomyCommand } from './EconomyCommand';
+import { QuoteCommand } from './QuoteCommand';
 import CepCommand from './CepCommand';
 import ProfileCommand from './ProfileCommand';
 import SmsCommand from './SmsCommand';
 
-export default async (message) => {
-  const economyCommand = new EconomyCommand();
-  const quoteCommand = new QuoteCommand();
-  const cepCommand = new CepCommand(message.body);
-  const profileCommand = new ProfileCommand(message.body);
-  const smsCommand = new SmsCommand(message.body);
+export const CommandHandler = async (message: Message): Promise<void> => {
+  if (!message.body.startsWith('!')) return;
 
-  await commandDispatcher.register('cotacao', economyCommand);
-  await commandDispatcher.register('mencionar', quoteCommand);
-  await commandDispatcher.register('cep', cepCommand);
-  await commandDispatcher.register('perfil', profileCommand);
-  await commandDispatcher.register('sms', smsCommand);
+  await commandDispatcher.register('cotacao', EconomyCommand);
+  await commandDispatcher.register('mencionar', QuoteCommand);
+  await commandDispatcher.register('cep', new CepCommand(message.body));
+  await commandDispatcher.register('perfil', new ProfileCommand(message.body));
+  await commandDispatcher.register('sms', new SmsCommand(message.body));
 
   return commandDispatcher.dispatch(message.body.slice(1), message);
 };

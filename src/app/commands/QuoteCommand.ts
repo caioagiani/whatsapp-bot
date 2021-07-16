@@ -2,12 +2,12 @@ import { client } from '../../services/whatsapp';
 import { company } from '../../config/integrantes.json';
 import type { Message, GroupChat } from 'whatsapp-web.js';
 
-export default class QuoteCommand {
-  async execute(msg: Message) {
-    const chat: GroupChat = (await msg.getChat()) as any;
-    const user = await msg.getContact();
-
-    const { user: contato } = user.id;
+export const QuoteCommand = {
+  async execute(msg: Message): Promise<Message> {
+    const chat: Partial<GroupChat> = await msg.getChat();
+    const {
+      id: { user: contato },
+    } = await msg.getContact();
 
     await chat.sendStateTyping();
 
@@ -15,28 +15,26 @@ export default class QuoteCommand {
       return msg.reply('Comando apenas para grupos!');
     }
 
-    company.map(async ({ numero, admin }) => {
-      if (numero == contato) {
-        if (!admin) {
-          return msg.reply(
-            'Ops, você não tem permissão para executar este comando!',
-          );
-        }
+    company.forEach(async ({ numero, admin }): Promise<Message> => {
+      if (numero !== contato) return;
 
-        let text = '';
-        const mentions = [];
-
-        for (const participant of chat.participants) {
-          const contact = await client.getContactById(
-            participant.id._serialized,
-          );
-
-          mentions.push(contact);
-          text += `@${participant.id.user} `;
-        }
-
-        return chat.sendMessage(text, { mentions });
+      if (!admin) {
+        return msg.reply(
+          'Ops, você não tem permissão para executar este comando!',
+        );
       }
+
+      let text = '';
+      const mentions = [];
+
+      for (const participant of chat.participants) {
+        const contact = await client.getContactById(participant.id._serialized);
+
+        mentions.push(contact);
+        text += `@${participant.id.user} `;
+      }
+
+      return chat.sendMessage(text, { mentions });
     });
-  }
-}
+  },
+};
