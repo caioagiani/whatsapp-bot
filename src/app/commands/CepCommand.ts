@@ -8,7 +8,7 @@ export default class EconomyCommand {
     this.cep = cep;
   }
 
-  async execute(msg: Message) {
+  async execute(msg: Message): Promise<Message> {
     const [_, setCep] = this.cep.split(' ');
 
     const chat = await msg.getChat();

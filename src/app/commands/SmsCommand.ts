@@ -7,7 +7,7 @@ export default class ProfileCommand {
     this.mention = mention;
   }
 
-  async execute(msg: Message) {
+  async execute(msg: Message): Promise<Message> {
     const chat = await msg.getChat();
 
     const [contact] = await msg.getMentions();

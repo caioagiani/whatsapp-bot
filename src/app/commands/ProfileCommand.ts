@@ -8,7 +8,7 @@ export default class ProfileCommand {
     this.mention = mention;
   }
 
-  async execute(msg: Message) {
+  async execute(msg: Message): Promise<Message> {
     const chat = await msg.getChat();
 
     const [contact] = await msg.getMentions();
@@ -23,11 +23,11 @@ export default class ProfileCommand {
 
     await msg.reply('Stalkeando este contato...');
 
-    const url_i = await client.getProfilePicUrl(contact.number);
+    const uri = await client.getProfilePicUrl(contact.number);
 
-    if (!url_i) return msg.reply('Imagem não foi localizada.');
+    if (!uri) return msg.reply('Imagem não foi localizada.');
 
-    const imageProfile = await encode(url_i, { string: true });
+    const imageProfile = await encode(uri, { string: true });
 
     if (typeof imageProfile === 'string') {
       const media = new MessageMedia(

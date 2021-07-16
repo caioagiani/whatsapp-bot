@@ -2,8 +2,8 @@ import axios from 'axios';
 import type { ICurrency } from '../interfaces/Currency';
 import type { Message } from 'whatsapp-web.js';
 
-export default class EconomyCommand {
-  async execute(msg: Message) {
+export const EconomyCommand = {
+  async execute(msg: Message): Promise<Message> {
     const chat = await msg.getChat();
 
     await chat.sendStateTyping();
@@ -21,5 +21,5 @@ export default class EconomyCommand {
         data.BTC,
       )}`,
     );
-  }
-}
+  },
+};

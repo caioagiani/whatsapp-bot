@@ -1,25 +1,31 @@
-import { Client, MessageMedia } from 'whatsapp-web.js';
+import {
+  Client,
+  ClientOptions,
+  ClientSession,
+  MessageMedia,
+} from 'whatsapp-web.js';
 import { generate } from 'qrcode-terminal';
 import { existsSync, writeFile, unlink } from 'fs';
 import { resolve } from 'path';
 
 const sessionFile = resolve('src', 'data', 'session.json');
-const session = existsSync(sessionFile) ? require(sessionFile) : null;
-
-const client = new Client({
+const session: ClientSession = existsSync(sessionFile) && require(sessionFile);
+const optionsClient: ClientOptions = {
   puppeteer: {
     headless: true,
     args: ['--no-sandbox'],
   },
   session,
-} as any);
+};
+
+const client: Client = new Client(optionsClient);
 
 client.on('qr', (qr: string) => {
   generate(qr, { small: true });
 });
 
-client.on('authenticated', (session: any) => {
-  writeFile(sessionFile, JSON.stringify(session), (err) => {
+client.on('authenticated', (dataSession: ClientSession) => {
+  writeFile(sessionFile, JSON.stringify(dataSession), (err) => {
     if (err) console.log(err);
   });
 });
