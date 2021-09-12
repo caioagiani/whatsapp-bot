@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "mobizon-node": "^0.3.1",
+    "mobizon-node": "^0.4.0",
     "node-base64-image": "^2.0.1",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.13.2"
