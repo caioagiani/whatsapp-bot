@@ -4,13 +4,13 @@ import {
   ClientSession,
   MessageMedia,
 } from 'whatsapp-web.js';
-import { generate } from 'qrcode-terminal';
 import { existsSync, writeFile, unlink } from 'fs';
 import { resolve } from 'path';
+import { toString } from 'qrcode';
 
 const sessionFile = resolve('src', 'data', 'session.json');
 const session: ClientSession = existsSync(sessionFile) && require(sessionFile);
-const optionsClient: ClientOptions = {
+const optionsClient = {
   puppeteer: {
     headless: true,
     args: ['--no-sandbox'],
@@ -18,10 +18,17 @@ const optionsClient: ClientOptions = {
   session,
 };
 
-const client: Client = new Client(optionsClient);
+const client: Client = new Client(optionsClient as ClientOptions);
 
-client.on('qr', (qr: string) => {
-  generate(qr, { small: true });
+client.on('qr', async (qr: string) => {
+  const qrCodeTerminal = await toString(qr, {
+    width: 21,
+    margin: 2,
+    scale: 4,
+    type: 'utf8',
+  });
+
+  console.log(qrCodeTerminal);
 });
 
 client.on('authenticated', (dataSession: ClientSession) => {
@@ -35,7 +42,7 @@ client.on('ready', async () => {
 
   await client.sendMessage(
     '5511963928063@c.us',
-    `[${client.info.pushname}] - WhatsApp Online\n\n[x] Star project: https://github.com/caioagiani/whatsapp-bot`,
+    `[${client.info.pushname}] - WhatsApp Online\n\n[x] Please, like project: https://github.com/caioagiani/whatsapp-bot`,
   );
 });
 
