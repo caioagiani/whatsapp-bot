@@ -6,7 +6,7 @@ import {
 } from 'whatsapp-web.js';
 import { existsSync, writeFile, unlink } from 'fs';
 import { resolve } from 'path';
-import { toString } from 'qrcode';
+import * as qrcode from 'qrcode-terminal';
 
 const sessionFile = resolve('src', 'data', 'session.json');
 const session: ClientSession = existsSync(sessionFile) && require(sessionFile);
@@ -20,16 +20,7 @@ const optionsClient = {
 
 const client: Client = new Client(optionsClient as ClientOptions);
 
-client.on('qr', async (qr: string) => {
-  const qrCodeTerminal = await toString(qr, {
-    width: 21,
-    margin: 2,
-    scale: 4,
-    type: 'utf8',
-  });
-
-  console.log(qrCodeTerminal);
-});
+client.on('qr', async (qr: string) => qrcode.generate(qr, { small: true }));
 
 client.on('authenticated', (dataSession: ClientSession) => {
   writeFile(sessionFile, JSON.stringify(dataSession), (err) => {
