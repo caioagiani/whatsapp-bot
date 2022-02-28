@@ -48,7 +48,7 @@
     "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --ignore-watch src/data -r dotenv/config src/index.ts"
   },
   "dependencies": {
-    "axios": "^0.25.0",
+    "axios": "^0.26.0",
     "mobizon-node": "^0.4.3",
     "node-base64-image": "^2.0.1",
     "qrcode-terminal": "^0.12.0",
