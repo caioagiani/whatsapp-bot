@@ -1,5 +1,4 @@
 import axios from 'axios';
-import type { ICurrency } from '../interfaces/Currency';
 import type { Message } from 'whatsapp-web.js';
 
 export const EconomyCommand = {
@@ -12,14 +11,12 @@ export const EconomyCommand = {
       'https://economia.awesomeapi.com.br/all/USD-BRL,BTC-BRL,EUR-BRL',
     );
 
-    const type = (currency: ICurrency) => {
-      return `\n💲 *${currency.name} (${currency.code})* \nValor atual: R$ ${currency.bid} \nValor mais alto: R$ ${currency.high} \nValor mais baixo: R$ ${currency.low}\n`;
+    const getAllCurrencies = () => {
+      return Object.keys(data).map((key) => {
+        return `\n💲 *${data[key].name} (${data[key].code})* \nValor atual: R$ ${data[key].bid} \nValor mais alto: R$ ${data[key].high} \nValor mais baixo: R$ ${data[key].low}\n`;
+      });
     };
 
-    return msg.reply(
-      `Cotação atual: 💎💰🤑💹 \n${type(data.USD)} ${type(data.EUR)} ${type(
-        data.BTC,
-      )}`,
-    );
+    return msg.reply(`Cotação atual: 💎💰🤑💹 \n${getAllCurrencies()}`);
   },
 };
