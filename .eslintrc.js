@@ -5,11 +5,6 @@ module.exports = {
     'prettier',
     'plugin:prettier/recommended',
   ],
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
   env: {
     browser: true,
     node: true,
@@ -17,9 +12,6 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier'],
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
     ecmaVersion: 2018,
     sourceType: 'module',
   },
@@ -32,5 +24,4 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
   },
-  globals: { React: 'writable' },
 };
