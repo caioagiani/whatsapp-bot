@@ -15,26 +15,24 @@ export const QuoteCommand = {
       return msg.reply('Comando apenas para grupos!');
     }
 
-    company.forEach(async ({ numero, admin }): Promise<Message> => {
-      if (numero !== contato) return;
+    const allowPermissions = company.filter(
+      ({ numero, admin }) => numero === contato && admin,
+    );
 
-      if (!admin) {
-        return msg.reply(
-          'Ops, você não tem permissão para executar este comando!',
-        );
-      }
+    if (!allowPermissions.length) {
+      return msg.reply('Você não tem permissão para usar este comando!');
+    }
 
-      let text = '';
-      const mentions = [];
+    const mentions = [];
 
-      for (const participant of chat.participants) {
-        const contact = await client.getContactById(participant.id._serialized);
+    for (const participant of chat.participants) {
+      const contact = await client.getContactById(participant.id._serialized);
 
-        mentions.push(contact);
-        text += `@${participant.id.user} `;
-      }
+      mentions.push(contact);
+    }
 
-      return chat.sendMessage(text, { mentions });
-    });
+    const names = mentions.map((mention) => `@${mention.number}`).join(' ');
+
+    return chat.sendMessage(names, { mentions });
   },
 };

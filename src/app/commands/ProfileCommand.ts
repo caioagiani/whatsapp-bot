@@ -4,6 +4,7 @@ import type { Message } from 'whatsapp-web.js';
 
 export default class ProfileCommand {
   mention: string;
+
   constructor(mention: string) {
     this.mention = mention;
   }

@@ -4,13 +4,13 @@ import type { Message } from 'whatsapp-web.js';
 
 export default class EconomyCommand {
   cep: string;
+
   constructor(cep: string) {
     this.cep = cep;
   }
 
   async execute(msg: Message): Promise<Message> {
     const [_, setCep] = this.cep.split(' ');
-
     const chat = await msg.getChat();
 
     await chat.sendStateTyping();
