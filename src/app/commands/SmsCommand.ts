@@ -3,6 +3,7 @@ import mobizon from '../../services/mobizon';
 
 export default class ProfileCommand {
   mention: string;
+
   constructor(mention: string) {
     this.mention = mention;
   }

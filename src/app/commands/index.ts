@@ -1,6 +1,5 @@
 import { commandDispatcher } from '../utils/CommandDispatcher';
 import { Message } from 'whatsapp-web.js';
-
 import { EconomyCommand } from './EconomyCommand';
 import { QuoteCommand } from './QuoteCommand';
 import CepCommand from './CepCommand';
