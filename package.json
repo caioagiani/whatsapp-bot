@@ -50,25 +50,25 @@
     "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules -r dotenv/config src/index.ts"
   },
   "dependencies": {
-    "axios": "^0.26.0",
-    "mobizon-node": "^0.4.3",
+    "axios": "^0.27.0",
+    "mobizon-node": "^0.5.0",
     "node-base64-image": "^2.0.1",
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.16.1"
+    "whatsapp-web.js": "^1.16.7"
   },
   "devDependencies": {
-    "@types/node": "16.11.26",
+    "@types/node": "16.11.41",
     "@types/qrcode": "1.4.2",
     "@types/qrcode-terminal": "0.12.0",
-    "@typescript-eslint/eslint-plugin": "5.12.1",
-    "@typescript-eslint/parser": "5.12.1",
-    "dotenv": "16.0.0",
-    "eslint": "8.10.0",
-    "eslint-config-prettier": "8.4.0",
+    "@typescript-eslint/eslint-plugin": "5.28.0",
+    "@typescript-eslint/parser": "5.28.0",
+    "dotenv": "16.0.1",
+    "eslint": "8.18.0",
+    "eslint-config-prettier": "8.5.0",
     "eslint-loader": "4.0.2",
     "eslint-plugin-prettier": "4.0.0",
-    "prettier": "2.5.1",
+    "prettier": "2.7.1",
     "ts-node-dev": "1.1.8",
-    "typescript": "4.5.5"
+    "typescript": "4.7.4"
   }
 }
