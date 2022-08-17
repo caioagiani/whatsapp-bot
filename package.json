@@ -2,18 +2,20 @@
   "name": "whatsapp-web-bot",
   "main": "src/index.ts",
   "description": "WhatsApp Bot",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "license": "MIT",
   "keywords": [
     "whatsapp",
     "whatsapp-web",
     "whatsapp-bot",
     "whatsapp-api",
+    "whatsapp-multi-session",
     "whatsapp-multi-device",
     "api",
     "bot",
     "client",
     "node",
+    "nodejs",
     "typescript"
   ],
   "bugs": {
@@ -54,21 +56,21 @@
     "mobizon-node": "^0.5.0",
     "node-base64-image": "^2.0.1",
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.16.7"
+    "whatsapp-web.js": "^1.17.1"
   },
   "devDependencies": {
-    "@types/node": "16.11.41",
-    "@types/qrcode": "1.4.2",
+    "@types/node": "16.11.49",
+    "@types/qrcode": "1.4.3",
     "@types/qrcode-terminal": "0.12.0",
-    "@typescript-eslint/eslint-plugin": "5.28.0",
-    "@typescript-eslint/parser": "5.28.0",
+    "@typescript-eslint/eslint-plugin": "5.33.1",
+    "@typescript-eslint/parser": "5.33.1",
     "dotenv": "16.0.1",
-    "eslint": "8.18.0",
+    "eslint": "8.22.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-loader": "4.0.2",
-    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.7.1",
-    "ts-node-dev": "1.1.8",
+    "ts-node-dev": "2.0.0",
     "typescript": "4.7.4"
   }
 }
