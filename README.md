@@ -51,6 +51,7 @@ This application is a WhatsApp client that connects to WhatsApp Web using **Pupp
 
 | Command | Aliases | Description |
 |---------|---------|-------------|
+| `!help` | `!ajuda`, `!comandos`, `!commands` | Shows all available commands with descriptions |
 | `!cotacao` | `!moeda`, `!dolar`, `!bitcoin` | Get current currency exchange rates (USD, BTC, EUR) |
 | `!cep <code>` | - | Search Brazilian postal code information |
 | `!perfil @user` | `!foto`, `!avatar`, `!pic` | Get user's profile picture |
@@ -224,6 +225,24 @@ src/config/integrantes.json
 ---
 
 ## 📖 Usage Examples
+
+### Get Help
+```
+User: !help
+Bot: 📚 Available Commands
+
+━━━━━━━━━━━━━━━━━━━━
+
+🔹 !help
+   Shows all available commands with their descriptions
+   Aliases: !ajuda, !comandos, !commands
+
+🔹 !cotacao
+   Shows current exchange rates (USD, BTC, EUR)
+   Aliases: !moeda, !dolar, !bitcoin
+
+...
+```
 
 ### Get Currency Rates
 ```

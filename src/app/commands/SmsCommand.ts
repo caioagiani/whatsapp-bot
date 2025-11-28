@@ -3,25 +3,25 @@ import mobizon from '../../services/mobizon';
 import { BaseCommand } from '../utils/BaseCommand';
 
 /**
- * Comando para enviar SMS para um usuário mencionado
+ * Command to send SMS to a mentioned user
  */
 export class SmsCommand extends BaseCommand {
   name = 'sms';
-  description = 'Envia SMS para um usuário mencionado';
+  description = 'Sends SMS to a mentioned user';
 
   async execute(message: Message, args: string[]): Promise<Message> {
     await this.sendTyping(message);
 
-    // Validar se é grupo
+    // Validate if it's a group
     const groupError = await this.requireGroup(message);
     if (groupError) return groupError;
 
-    // Obter contato mencionado
+    // Get mentioned contact
     const [contact] = await message.getMentions();
 
     if (!contact) {
       return message.reply(
-        '⚠️ Por favor, mencione um usuário.\n\n📖 *Uso:* !sms @usuario',
+        '⚠️ Please mention a user.\n\n📖 *Usage:* !sms @user',
       );
     }
 
@@ -29,19 +29,19 @@ export class SmsCommand extends BaseCommand {
       const sendSms = await mobizon.sendSms({
         recipient: contact.number,
         from: '',
-        text: 'SMS enviado via WhatsApp BOT.',
+        text: 'SMS sent via WhatsApp BOT.',
       });
 
       if (sendSms.code !== 0) {
         return message.reply(
-          '⚠️ Houve um erro ao enviar o SMS. Tente novamente.',
+          '⚠️ There was an error sending the SMS. Please try again.',
         );
       }
 
-      return message.reply('✅ SMS enviado com sucesso!');
+      return message.reply('✅ SMS sent successfully!');
     } catch (error) {
-      console.error('Erro ao enviar SMS:', error);
-      return message.reply('⚠️ Não foi possível enviar o SMS.');
+      console.error('Error sending SMS:', error);
+      return message.reply('⚠️ Unable to send SMS.');
     }
   }
 }

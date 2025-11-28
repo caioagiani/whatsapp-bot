@@ -4,26 +4,26 @@ import type { Message } from 'whatsapp-web.js';
 import { BaseCommand } from '../utils/BaseCommand';
 
 /**
- * Comando para consultar informações de CEP
+ * Command to query postal code information
  */
 export class CepCommand extends BaseCommand {
   name = 'cep';
-  description = 'Busca informações de um CEP brasileiro';
+  description = 'Search information for a Brazilian postal code';
 
   async execute(message: Message, args: string[]): Promise<Message> {
     await this.sendTyping(message);
 
-    // Validar argumentos
+    // Validate arguments
     if (args.length === 0) {
       return message.reply(
-        '⚠️ Por favor, informe um CEP.\n\n📖 *Uso:* !cep 01310-100',
+        '⚠️ Please provide a postal code.\n\n📖 *Usage:* !cep 01310-100',
       );
     }
 
-    const cep = args[0].replace(/\D/g, ''); // Remove caracteres não numéricos
+    const cep = args[0].replace(/\D/g, ''); // Remove non-numeric characters
 
     if (cep.length !== 8) {
-      return message.reply('⚠️ CEP inválido! O CEP deve ter 8 dígitos.');
+      return message.reply('⚠️ Invalid postal code! The code must have 8 digits.');
     }
 
     try {
@@ -32,16 +32,16 @@ export class CepCommand extends BaseCommand {
       );
 
       return message.reply(
-        `📮 *Informações do CEP*\n\n` +
-        `*CEP:* ${data.cep}\n` +
-        `*Logradouro:* ${data.street}\n` +
-        `*Bairro:* ${data.neighborhood}\n` +
-        `*Cidade:* ${data.city}\n` +
-        `*UF:* ${data.state}`,
+        `📮 *Postal Code Information*\n\n` +
+        `*Postal Code:* ${data.cep}\n` +
+        `*Street:* ${data.street}\n` +
+        `*Neighborhood:* ${data.neighborhood}\n` +
+        `*City:* ${data.city}\n` +
+        `*State:* ${data.state}`,
       );
     } catch (error) {
-      console.error('Erro ao buscar CEP:', error);
-      return message.reply('⚠️ CEP não localizado ou serviço indisponível.');
+      console.error('Error fetching postal code:', error);
+      return message.reply('⚠️ Postal code not found or service unavailable.');
     }
   }
 }

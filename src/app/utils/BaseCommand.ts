@@ -2,8 +2,8 @@ import type { Message, Chat } from 'whatsapp-web.js';
 import type { ICommand } from '../interfaces/ICommand';
 
 /**
- * Classe base abstrata para comandos
- * Fornece funcionalidades comuns para todos os comandos
+ * Abstract base class for commands
+ * Provides common functionality for all commands
  */
 export abstract class BaseCommand implements ICommand {
     abstract name: string;
@@ -13,7 +13,7 @@ export abstract class BaseCommand implements ICommand {
     abstract execute(message: Message, args: string[]): Promise<Message | void>;
 
     /**
-     * Envia o estado "digitando..." no chat
+     * Sends "typing..." state in the chat
      */
     protected async sendTyping(message: Message): Promise<void> {
         const chat = await message.getChat();
@@ -21,7 +21,7 @@ export abstract class BaseCommand implements ICommand {
     }
 
     /**
-     * Verifica se a mensagem foi enviada em um grupo
+     * Checks if the message was sent in a group
      */
     protected async isGroup(message: Message): Promise<boolean> {
         const chat = await message.getChat();
@@ -29,26 +29,26 @@ export abstract class BaseCommand implements ICommand {
     }
 
     /**
-     * Obtém o chat da mensagem
+     * Gets the chat from the message
      */
     protected async getChat(message: Message): Promise<Chat> {
         return message.getChat();
     }
 
     /**
-     * Valida se o comando está sendo executado em um grupo
-     * Retorna mensagem de erro se não estiver
+     * Validates if the command is being executed in a group
+     * Returns error message if not
      */
     protected async requireGroup(message: Message): Promise<Message | null> {
         const isGroup = await this.isGroup(message);
         if (!isGroup) {
-            return message.reply('⚠️ Este comando só pode ser usado em grupos!');
+            return message.reply('⚠️ This command can only be used in groups!');
         }
         return null;
     }
 
     /**
-     * Valida se há argumentos suficientes
+     * Validates if there are enough arguments
      */
     protected validateArgs(
         message: Message,
@@ -57,7 +57,7 @@ export abstract class BaseCommand implements ICommand {
         usage: string,
     ): Message | null {
         if (args.length < minArgs) {
-            message.reply(`⚠️ Uso incorreto!\n\n📖 *Uso:* ${usage}`);
+            message.reply(`⚠️ Incorrect usage!\n\n📖 *Usage:* ${usage}`);
             return message as any;
         }
         return null;

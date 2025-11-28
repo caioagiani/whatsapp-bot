@@ -2,20 +2,20 @@ import type { ICommand } from '../interfaces/ICommand';
 import type { Message } from 'whatsapp-web.js';
 
 /**
- * Dispatcher responsável por gerenciar e executar comandos
+ * Dispatcher responsible for managing and executing commands
  */
 class CommandDispatcher {
   private commands: Map<string, ICommand> = new Map();
   private aliases: Map<string, string> = new Map();
 
   /**
-   * Registra um comando no dispatcher
-   * @param command - Instância do comando a ser registrado
+   * Registers a command in the dispatcher
+   * @param command - Command instance to be registered
    */
   register(command: ICommand): void {
     this.commands.set(command.name, command);
 
-    // Registrar aliases se existirem
+    // Register aliases if they exist
     if (command.aliases && command.aliases.length > 0) {
       command.aliases.forEach((alias) => {
         this.aliases.set(alias, command.name);
@@ -24,17 +24,17 @@ class CommandDispatcher {
   }
 
   /**
-   * Despacha um comando para execução
-   * @param commandName - Nome do comando (ou alias)
-   * @param message - Mensagem do WhatsApp
-   * @param args - Argumentos do comando
+   * Dispatches a command for execution
+   * @param commandName - Command name (or alias)
+   * @param message - WhatsApp message
+   * @param args - Command arguments
    */
   async dispatch(
     commandName: string,
     message: Message,
     args: string[],
   ): Promise<void> {
-    // Resolver alias para nome real do comando
+    // Resolve alias to real command name
     const resolvedName = this.aliases.get(commandName) || commandName;
     const command = this.commands.get(resolvedName);
 
@@ -42,17 +42,17 @@ class CommandDispatcher {
       try {
         await command.execute(message, args);
       } catch (error) {
-        console.error(`❌ Erro ao executar comando '${resolvedName}':`, error);
+        console.error(`❌ Error executing command '${resolvedName}':`, error);
         await message.reply(
-          '⚠️ Ocorreu um erro ao executar o comando. Tente novamente mais tarde.',
+          '⚠️ An error occurred while executing the command. Please try again later.',
         );
       }
     }
-    // Se comando não existe, não faz nada (silencioso)
+    // If command doesn't exist, do nothing (silent)
   }
 
   /**
-   * Obtém um comando pelo nome ou alias
+   * Gets a command by name or alias
    */
   getCommand(name: string): ICommand | undefined {
     const resolvedName = this.aliases.get(name) || name;
@@ -60,14 +60,14 @@ class CommandDispatcher {
   }
 
   /**
-   * Retorna todos os comandos registrados
+   * Returns all registered commands
    */
   getAllCommands(): ICommand[] {
     return Array.from(this.commands.values());
   }
 
   /**
-   * Verifica se um comando existe
+   * Checks if a command exists
    */
   hasCommand(name: string): boolean {
     const resolvedName = this.aliases.get(name) || name;

@@ -4,36 +4,36 @@ import type { Message } from 'whatsapp-web.js';
 import { BaseCommand } from '../utils/BaseCommand';
 
 /**
- * Comando para visualizar foto de perfil de um usuário
+ * Command to view a user's profile picture
  */
 export class ProfileCommand extends BaseCommand {
   name = 'perfil';
-  description = 'Mostra a foto de perfil de um usuário mencionado';
+  description = 'Shows the profile picture of a mentioned user';
   aliases = ['foto', 'avatar', 'pic'];
 
   async execute(message: Message, args: string[]): Promise<Message> {
     await this.sendTyping(message);
 
-    // Validar se é grupo
+    // Validate if it's a group
     const groupError = await this.requireGroup(message);
     if (groupError) return groupError;
 
-    // Obter contato mencionado
+    // Get mentioned contact
     const [contact] = await message.getMentions();
 
     if (!contact) {
       return message.reply(
-        '⚠️ Por favor, mencione um usuário.\n\n📖 *Uso:* !perfil @usuario',
+        '⚠️ Please mention a user.\n\n📖 *Usage:* !perfil @user',
       );
     }
 
-    await message.reply('🔍 Buscando foto de perfil...');
+    await message.reply('🔍 Searching for profile picture...');
 
     try {
       const uri = await client.getProfilePicUrl(contact.number);
 
       if (!uri) {
-        return message.reply('⚠️ Este usuário não possui foto de perfil.');
+        return message.reply('⚠️ This user does not have a profile picture.');
       }
 
       const imageProfile = await encode(uri, { string: true });
@@ -48,10 +48,10 @@ export class ProfileCommand extends BaseCommand {
         return client.sendMessage(message.from, media);
       }
 
-      return message.reply('⚠️ Erro ao processar a imagem.');
+      return message.reply('⚠️ Error processing the image.');
     } catch (error) {
-      console.error('Erro ao buscar foto de perfil:', error);
-      return message.reply('⚠️ Não foi possível obter a foto de perfil.');
+      console.error('Error fetching profile picture:', error);
+      return message.reply('⚠️ Unable to get the profile picture.');
     }
   }
 }

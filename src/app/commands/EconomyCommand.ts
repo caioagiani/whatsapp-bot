@@ -3,11 +3,11 @@ import type { Message } from 'whatsapp-web.js';
 import { BaseCommand } from '../utils/BaseCommand';
 
 /**
- * Comando para consultar cotações de moedas
+ * Command to query currency exchange rates
  */
 export class EconomyCommand extends BaseCommand {
   name = 'cotacao';
-  description = 'Mostra cotação atual de moedas (USD, BTC, EUR)';
+  description = 'Shows current exchange rates (USD, BTC, EUR)';
   aliases = ['moeda', 'dolar', 'bitcoin'];
 
   async execute(message: Message, args: string[]): Promise<Message> {
@@ -21,16 +21,16 @@ export class EconomyCommand extends BaseCommand {
       const getAllCurrencies = () => {
         return Object.keys(data)
           .map((key) => {
-            return `\n💲 *${data[key].name} (${data[key].code})* \nValor atual: R$ ${data[key].bid} \nValor mais alto: R$ ${data[key].high} \nValor mais baixo: R$ ${data[key].low}\n`;
+            return `\n💲 *${data[key].name} (${data[key].code})* \nCurrent value: R$ ${data[key].bid} \nHighest value: R$ ${data[key].high} \nLowest value: R$ ${data[key].low}\n`;
           })
           .join('');
       };
 
-      return message.reply(`💎 *Cotação Atual* 💰🤑💹 \n${getAllCurrencies()}`);
+      return message.reply(`💎 *Current Exchange Rates* 💰🤑💹 \n${getAllCurrencies()}`);
     } catch (error) {
-      console.error('Erro ao buscar cotações:', error);
+      console.error('Error fetching exchange rates:', error);
       return message.reply(
-        '⚠️ Não foi possível obter as cotações no momento. Tente novamente mais tarde.',
+        '⚠️ Unable to get exchange rates at the moment. Please try again later.',
       );
     }
   }

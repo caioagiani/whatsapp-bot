@@ -7,36 +7,38 @@ import { QuoteCommand } from './QuoteCommand';
 import { CepCommand } from './CepCommand';
 import { ProfileCommand } from './ProfileCommand';
 import { SmsCommand } from './SmsCommand';
+import { HelpCommand } from './HelpCommand';
 
 /**
- * Inicializa e registra todos os comandos disponíveis
+ * Initializes and registers all available commands
  */
 export const initializeCommands = (): void => {
-  // Registrar todos os comandos
+  // Register all commands
+  commandDispatcher.register(new HelpCommand());
   commandDispatcher.register(new EconomyCommand());
   commandDispatcher.register(new QuoteCommand());
   commandDispatcher.register(new CepCommand());
   commandDispatcher.register(new ProfileCommand());
   commandDispatcher.register(new SmsCommand());
 
-  console.log(`✅ ${commandDispatcher.getAllCommands().length} comandos registrados`);
+  console.log(`✅ ${commandDispatcher.getAllCommands().length} commands registered`);
 };
 
-// Inicializar comandos imediatamente quando o módulo é carregado
+// Initialize commands immediately when the module is loaded
 initializeCommands();
 
 /**
- * Handler principal de comandos
- * Processa mensagens que começam com '!' e despacha para o comando apropriado
+ * Main command handler
+ * Processes messages starting with '!' and dispatches to the appropriate command
  */
 export const CommandHandler = async (message: Message): Promise<void> => {
-  // Ignorar mensagens que não são comandos
+  // Ignore messages that are not commands
   if (!message.body.startsWith('!')) return;
 
-  // Extrair comando e argumentos
+  // Extract command and arguments
   const commandText = message.body.slice(1); // Remove '!'
   const [commandName, ...args] = commandText.split(' ');
 
-  // Despachar para o comando apropriado
+  // Dispatch to the appropriate command
   await commandDispatcher.dispatch(commandName.toLowerCase(), message, args);
 };

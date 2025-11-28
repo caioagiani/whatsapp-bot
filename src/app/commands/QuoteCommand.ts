@@ -4,17 +4,17 @@ import type { Message, GroupChat } from 'whatsapp-web.js';
 import { BaseCommand } from '../utils/BaseCommand';
 
 /**
- * Comando para mencionar todos os membros de um grupo
+ * Command to mention all group members
  */
 export class QuoteCommand extends BaseCommand {
   name = 'mencionar';
-  description = 'Menciona todos os membros do grupo (apenas admins)';
+  description = 'Mentions all group members (admins only)';
   aliases = ['everyone', 'all', 'todos'];
 
   async execute(message: Message, args: string[]): Promise<Message | void> {
     await this.sendTyping(message);
 
-    // Validar se é grupo
+    // Validate if it's a group
     const groupError = await this.requireGroup(message);
     if (groupError) return groupError;
 
@@ -23,16 +23,16 @@ export class QuoteCommand extends BaseCommand {
       id: { user: contato },
     } = await message.getContact();
 
-    // Verificar permissões
+    // Check permissions
     const allowPermissions = company.filter(
       ({ numero, admin }) => numero === contato && admin,
     );
 
     if (!allowPermissions.length) {
-      return message.reply('⚠️ Você não tem permissão para usar este comando!');
+      return message.reply('⚠️ You do not have permission to use this command!');
     }
 
-    // Mencionar todos os participantes
+    // Mention all participants
     const mentions = [];
 
     for (const participant of chat.participants) {
