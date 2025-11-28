@@ -2,6 +2,7 @@
 dist
 node_modules
 *.lock
+package-lock.json
 src/config/integrantes.json
 .idea
 .wwebjs_*
