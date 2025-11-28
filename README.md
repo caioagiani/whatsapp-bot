@@ -9,7 +9,7 @@
   <img 
     width="100" 
     height="80%" 
-    src="https://github.com/caioagiani/whatsapp-bot/blob/main/.github/assets/logo.png" 
+    src=".github/assets/logo.png" 
     alt="WhatsApp BOT @caioagiani"
     title="WhatsApp BOT @caioagiani"
   /></a>
@@ -337,12 +337,17 @@ This project is **not affiliated, associated, authorized, endorsed by, or in any
 
 ---
 
+### 👥 Contributors
+
+<a href="https://github.com/caioagiani/whatsapp-bot/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=caioagiani/whatsapp-bot" />
+</a>
+
 ## 🙏 Acknowledgments
 
 Special thanks to:
 
 - [@pedroslopez](https://github.com/pedroslopez) - whatsapp-web.js library
-- [@raniellyferreira](https://github.com/raniellyferreira) - Initial contributions
 - All contributors who have helped improve this project
 
 ---
