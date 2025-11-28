@@ -8,3 +8,5 @@ src/config/integrantes.json
 .wwebjs_*
 src/data/*
 !src/data/.gitkeep
+.DS_Store
+

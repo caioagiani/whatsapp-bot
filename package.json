@@ -30,23 +30,6 @@
     "email": "caio.agiani14@gmail.com",
     "url": "https://www.linkedin.com/in/caioagiani"
   },
-  "contributors": [
-    {
-      "name": "Caio Agiani",
-      "email": "caio.agiani14@gmail.com",
-      "url": "https://www.linkedin.com/in/caioagiani"
-    },
-    {
-      "name": "Pedro S. Lopez",
-      "email": "pedroslopez@me.com",
-      "url": "https://github.com/pedroslopez"
-    },
-    {
-      "name": "Ranielly Ferreira",
-      "email": "eu@raniellyferreira.com.br",
-      "url": "https://github.com/raniellyferreira"
-    }
-  ],
   "scripts": {
     "lint": "eslint . --fix --ext .js",
     "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules -r dotenv/config src/index.ts"
