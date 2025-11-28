@@ -1,30 +1,49 @@
 import axios from 'axios';
 import type { IResponse, IServerData } from '../interfaces/Cep';
 import type { Message } from 'whatsapp-web.js';
+import { BaseCommand } from '../utils/BaseCommand';
 
-export default class EconomyCommand {
-  cep: string;
+/**
+ * Command to query postal code information
+ */
+export class CepCommand extends BaseCommand {
+  name = 'cep';
+  description = 'Search information for a Brazilian postal code';
 
-  constructor(cep: string) {
-    this.cep = cep;
-  }
+  async execute(message: Message, args: string[]): Promise<Message> {
+    await this.sendTyping(message);
 
-  async execute(msg: Message): Promise<Message> {
-    const [_, setCep] = this.cep.split(' ');
-    const chat = await msg.getChat();
+    // Validate arguments
+    if (args.length === 0) {
+      return message.reply(
+        '⚠️ Please provide a postal code.\n\n📖 *Usage:* !cep 01310-100',
+      );
+    }
 
-    await chat.sendStateTyping();
+    const cep = args[0].replace(/\D/g, ''); // Remove non-numeric characters
+
+    if (cep.length !== 8) {
+      return message.reply(
+        '⚠️ Invalid postal code! The code must have 8 digits.',
+      );
+    }
 
     try {
       const { data }: IResponse = await axios.get<IServerData>(
-        `https://brasilapi.com.br/api/cep/v1/${setCep}`,
+        `https://brasilapi.com.br/api/cep/v1/${cep}`,
       );
 
-      return msg.reply(
-        `*CEP*: ${data.cep}\n*Logradouro*: ${data.street}\n*Cidade*: ${data.city}\n*Bairro*: ${data.neighborhood}\n*UF*: ${data.state}`,
+      return message.reply(
+        `📮 *Postal Code Information*\n\n` +
+          `*Postal Code:* ${data.cep}\n` +
+          `*Street:* ${data.street}\n` +
+          `*Neighborhood:* ${data.neighborhood}\n` +
+          `*City:* ${data.city}\n` +
+          `*State:* ${data.state}`,
       );
     } catch (error) {
-      return msg.reply('CEP não localizado!');
+      console.error('Error fetching postal code:', error);
+      return message.reply('⚠️ Postal code not found or service unavailable.');
     }
   }
 }

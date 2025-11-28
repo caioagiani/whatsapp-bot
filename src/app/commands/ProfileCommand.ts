@@ -1,45 +1,57 @@
 import { client, MessageMedia } from '../../services/whatsapp';
 import { encode } from 'node-base64-image';
 import type { Message } from 'whatsapp-web.js';
+import { BaseCommand } from '../utils/BaseCommand';
 
-export default class ProfileCommand {
-  mention: string;
+/**
+ * Command to view a user's profile picture
+ */
+export class ProfileCommand extends BaseCommand {
+  name = 'perfil';
+  description = 'Shows the profile picture of a mentioned user';
+  aliases = ['foto', 'avatar', 'pic'];
 
-  constructor(mention: string) {
-    this.mention = mention;
-  }
+  async execute(message: Message, args: string[]): Promise<Message> {
+    await this.sendTyping(message);
 
-  async execute(msg: Message): Promise<Message> {
-    const chat = await msg.getChat();
+    // Validate if it's a group
+    const groupError = await this.requireGroup(message);
+    if (groupError) return groupError;
 
-    const [contact] = await msg.getMentions();
+    // Get mentioned contact
+    const [contact] = await message.getMentions();
 
-    await chat.sendStateTyping();
-
-    if (!chat.isGroup) {
-      return msg.reply('Comando apenas para grupos!');
-    }
-
-    if (!contact) return msg.reply('Contato não localizado.');
-
-    await msg.reply('Stalkeando este contato...');
-
-    const uri = await client.getProfilePicUrl(contact.number);
-
-    if (!uri) return msg.reply('Imagem não foi localizada.');
-
-    const imageProfile = await encode(uri, { string: true });
-
-    if (typeof imageProfile === 'string') {
-      const media = new MessageMedia(
-        'image/png',
-        imageProfile,
-        `${contact.number}.png`,
+    if (!contact) {
+      return message.reply(
+        '⚠️ Please mention a user.\n\n📖 *Usage:* !perfil @user',
       );
-
-      return client.sendMessage(msg.from, media);
     }
 
-    return msg.reply('Erro inesperado');
+    await message.reply('🔍 Searching for profile picture...');
+
+    try {
+      const uri = await client.getProfilePicUrl(contact.number);
+
+      if (!uri) {
+        return message.reply('⚠️ This user does not have a profile picture.');
+      }
+
+      const imageProfile = await encode(uri, { string: true });
+
+      if (typeof imageProfile === 'string') {
+        const media = new MessageMedia(
+          'image/png',
+          imageProfile,
+          `${contact.number}.png`,
+        );
+
+        return client.sendMessage(message.from, media);
+      }
+
+      return message.reply('⚠️ Error processing the image.');
+    } catch (error) {
+      console.error('Error fetching profile picture:', error);
+      return message.reply('⚠️ Unable to get the profile picture.');
+    }
   }
 }

@@ -1,36 +1,47 @@
 import type { Message } from 'whatsapp-web.js';
 import mobizon from '../../services/mobizon';
+import { BaseCommand } from '../utils/BaseCommand';
 
-export default class ProfileCommand {
-  mention: string;
+/**
+ * Command to send SMS to a mentioned user
+ */
+export class SmsCommand extends BaseCommand {
+  name = 'sms';
+  description = 'Sends SMS to a mentioned user';
 
-  constructor(mention: string) {
-    this.mention = mention;
-  }
+  async execute(message: Message, args: string[]): Promise<Message> {
+    await this.sendTyping(message);
 
-  async execute(msg: Message): Promise<Message> {
-    const chat = await msg.getChat();
+    // Validate if it's a group
+    const groupError = await this.requireGroup(message);
+    if (groupError) return groupError;
 
-    const [contact] = await msg.getMentions();
+    // Get mentioned contact
+    const [contact] = await message.getMentions();
 
-    await chat.sendStateTyping();
-
-    if (!chat.isGroup) {
-      return msg.reply('Comando apenas para grupos!');
+    if (!contact) {
+      return message.reply(
+        '⚠️ Please mention a user.\n\n📖 *Usage:* !sms @user',
+      );
     }
 
-    if (!contact) return msg.reply('Contato não localizado.');
+    try {
+      const sendSms = await mobizon.sendSms({
+        recipient: contact.number,
+        from: '',
+        text: 'SMS sent via WhatsApp BOT.',
+      });
 
-    const sendSms = await mobizon.sendSms({
-      recipient: contact.number,
-      from: '',
-      text: 'Sms enviado via BOT.',
-    });
+      if (sendSms.code !== 0) {
+        return message.reply(
+          '⚠️ There was an error sending the SMS. Please try again.',
+        );
+      }
 
-    if (sendSms.code !== 0) {
-      return msg.reply('Oops, houve um erro ao enviar SMS, tente novamente.');
+      return message.reply('✅ SMS sent successfully!');
+    } catch (error) {
+      console.error('Error sending SMS:', error);
+      return message.reply('⚠️ Unable to send SMS.');
     }
-
-    return msg.reply('SMS enviado com sucesso!');
   }
 }

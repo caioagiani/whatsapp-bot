@@ -2,7 +2,7 @@
   "name": "whatsapp-web-bot",
   "main": "src/index.ts",
   "description": "WhatsApp Bot",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "license": "MIT",
   "keywords": [
     "whatsapp",
@@ -30,25 +30,8 @@
     "email": "caio.agiani14@gmail.com",
     "url": "https://www.linkedin.com/in/caioagiani"
   },
-  "contributors": [
-    {
-      "name": "Caio Agiani",
-      "email": "caio.agiani14@gmail.com",
-      "url": "https://www.linkedin.com/in/caioagiani"
-    },
-    {
-      "name": "Pedro S. Lopez",
-      "email": "pedroslopez@me.com",
-      "url": "https://github.com/pedroslopez"
-    },
-    {
-      "name": "Ranielly Ferreira",
-      "email": "eu@raniellyferreira.com.br",
-      "url": "https://github.com/raniellyferreira"
-    }
-  ],
   "scripts": {
-    "lint": "eslint . --fix --ext .js",
+    "lint": "eslint . --fix --ext .js,.ts",
     "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules -r dotenv/config src/index.ts"
   },
   "dependencies": {

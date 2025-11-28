@@ -20,7 +20,7 @@ client.on('disconnected', () => console.log('WhatsApp lost connection.'));
 client.on('ready', async () => {
   await client.sendMessage(
     '5511999865802@c.us',
-    `[${client.info.pushname}] - WhatsApp Online\n\n[⭐] Please *like* this project: https://github.com/caioagiani/whatsapp-bot\n\n[💝] Sponsor this SourceCode: https://github.com/sponsors/caioagiani`,
+    `[${client.info.pushname}] - WhatsApp Online\n\n[⭐] Please *star* this project: https://github.com/caioagiani/whatsapp-bot\n\n[💝] Sponsor this project: https://github.com/sponsors/caioagiani`,
   );
 
   console.log('WhatsApp bot successfully connected!');
