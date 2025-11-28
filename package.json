@@ -2,7 +2,7 @@
   "name": "whatsapp-web-bot",
   "main": "src/index.ts",
   "description": "WhatsApp Bot",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "license": "MIT",
   "keywords": [
     "whatsapp",
