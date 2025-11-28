@@ -23,7 +23,9 @@ export class CepCommand extends BaseCommand {
     const cep = args[0].replace(/\D/g, ''); // Remove non-numeric characters
 
     if (cep.length !== 8) {
-      return message.reply('⚠️ Invalid postal code! The code must have 8 digits.');
+      return message.reply(
+        '⚠️ Invalid postal code! The code must have 8 digits.',
+      );
     }
 
     try {
@@ -33,11 +35,11 @@ export class CepCommand extends BaseCommand {
 
       return message.reply(
         `📮 *Postal Code Information*\n\n` +
-        `*Postal Code:* ${data.cep}\n` +
-        `*Street:* ${data.street}\n` +
-        `*Neighborhood:* ${data.neighborhood}\n` +
-        `*City:* ${data.city}\n` +
-        `*State:* ${data.state}`,
+          `*Postal Code:* ${data.cep}\n` +
+          `*Street:* ${data.street}\n` +
+          `*Neighborhood:* ${data.neighborhood}\n` +
+          `*City:* ${data.city}\n` +
+          `*State:* ${data.state}`,
       );
     } catch (error) {
       console.error('Error fetching postal code:', error);

@@ -76,4 +76,3 @@ class CommandDispatcher {
 }
 
 export const commandDispatcher = new CommandDispatcher();
-

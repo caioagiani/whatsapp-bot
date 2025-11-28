@@ -26,7 +26,9 @@ export class EconomyCommand extends BaseCommand {
           .join('');
       };
 
-      return message.reply(`💎 *Current Exchange Rates* 💰🤑💹 \n${getAllCurrencies()}`);
+      return message.reply(
+        `💎 *Current Exchange Rates* 💰🤑💹 \n${getAllCurrencies()}`,
+      );
     } catch (error) {
       console.error('Error fetching exchange rates:', error);
       return message.reply(
@@ -35,4 +37,3 @@ export class EconomyCommand extends BaseCommand {
     }
   }
 }
-

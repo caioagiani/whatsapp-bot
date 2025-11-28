@@ -21,7 +21,9 @@ export const initializeCommands = (): void => {
   commandDispatcher.register(new ProfileCommand());
   commandDispatcher.register(new SmsCommand());
 
-  console.log(`✅ ${commandDispatcher.getAllCommands().length} commands registered`);
+  console.log(
+    `✅ ${commandDispatcher.getAllCommands().length} commands registered`,
+  );
 };
 
 // Initialize commands immediately when the module is loaded

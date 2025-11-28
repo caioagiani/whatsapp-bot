@@ -29,7 +29,9 @@ export class QuoteCommand extends BaseCommand {
     );
 
     if (!allowPermissions.length) {
-      return message.reply('⚠️ You do not have permission to use this command!');
+      return message.reply(
+        '⚠️ You do not have permission to use this command!',
+      );
     }
 
     // Mention all participants
@@ -45,4 +47,3 @@ export class QuoteCommand extends BaseCommand {
     return chat.sendMessage(names, { mentions });
   }
 }
-
