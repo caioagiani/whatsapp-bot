@@ -4,6 +4,6 @@ node_modules
 *.lock
 src/config/integrantes.json
 .idea
-.wwebjs_auth
+.wwebjs_*
 src/data/*
 !src/data/.gitkeep
