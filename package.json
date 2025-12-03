@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/node": "16.11.49",
-    "@types/qrcode": "1.4.3",
+    "@types/qrcode": "1.5.6",
     "@types/qrcode-terminal": "0.12.0",
     "@typescript-eslint/eslint-plugin": "5.33.1",
     "@typescript-eslint/parser": "5.33.1",
