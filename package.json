@@ -49,7 +49,7 @@
     "@typescript-eslint/parser": "5.33.1",
     "dotenv": "16.0.1",
     "eslint": "8.22.0",
-    "eslint-config-prettier": "8.5.0",
+    "eslint-config-prettier": "8.10.2",
     "eslint-loader": "4.0.2",
     "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.7.1",
