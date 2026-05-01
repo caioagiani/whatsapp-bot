@@ -18,7 +18,7 @@ export class QuoteCommand extends BaseCommand {
     const groupError = await this.requireGroup(message);
     if (groupError) return groupError;
 
-    const chat: Partial<GroupChat> = await message.getChat();
+    const chat = (await message.getChat()) as GroupChat;
     const {
       id: { user: contato },
     } = await message.getContact();

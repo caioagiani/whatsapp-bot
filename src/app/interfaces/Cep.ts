@@ -1,7 +1,3 @@
-export interface IResponse {
-  data: IServerData;
-}
-
 export interface IServerData {
   cep: string;
   state: string;

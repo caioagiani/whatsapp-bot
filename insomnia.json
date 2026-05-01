@@ -1,0 +1,153 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-04-30",
+  "__export_source": "whatsapp-bot",
+  "resources": [
+    {
+      "_id": "wrk_whatsapp_bot",
+      "_type": "workspace",
+      "name": "WhatsApp Bot API",
+      "description": "REST API do WhatsApp Bot"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_whatsapp_bot",
+      "name": "Local",
+      "data": {
+        "base_url": "http://localhost:3000",
+        "api_key": ""
+      }
+    },
+    {
+      "_id": "fld_status",
+      "_type": "request_group",
+      "parentId": "wrk_whatsapp_bot",
+      "name": "Status"
+    },
+    {
+      "_id": "req_status",
+      "_type": "request",
+      "parentId": "fld_status",
+      "name": "Get bot status",
+      "method": "GET",
+      "url": "{{ base_url }}/api/status",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ api_key }}" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "fld_contacts",
+      "_type": "request_group",
+      "parentId": "wrk_whatsapp_bot",
+      "name": "Contacts"
+    },
+    {
+      "_id": "req_contacts_list",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "List all contacts",
+      "method": "GET",
+      "url": "{{ base_url }}/api/contacts",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ api_key }}" }
+      ],
+      "parameters": [
+        { "name": "page", "value": "1" },
+        { "name": "limit", "value": "20" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_contacts_search",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Search contacts",
+      "method": "GET",
+      "url": "{{ base_url }}/api/contacts/search",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ api_key }}" }
+      ],
+      "parameters": [
+        { "name": "q", "value": "nome ou numero" },
+        { "name": "page", "value": "1" },
+        { "name": "limit", "value": "20" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "fld_groups",
+      "_type": "request_group",
+      "parentId": "wrk_whatsapp_bot",
+      "name": "Groups"
+    },
+    {
+      "_id": "req_groups_list",
+      "_type": "request",
+      "parentId": "fld_groups",
+      "name": "List all groups",
+      "method": "GET",
+      "url": "{{ base_url }}/api/groups",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ api_key }}" }
+      ],
+      "parameters": [
+        { "name": "page", "value": "1" },
+        { "name": "limit", "value": "20" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_groups_detail",
+      "_type": "request",
+      "parentId": "fld_groups",
+      "name": "Get group details + participants",
+      "method": "GET",
+      "url": "{{ base_url }}/api/groups/120363000000000001@g.us",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ api_key }}" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "fld_messages",
+      "_type": "request_group",
+      "parentId": "wrk_whatsapp_bot",
+      "name": "Messages"
+    },
+    {
+      "_id": "req_send_contact",
+      "_type": "request",
+      "parentId": "fld_messages",
+      "name": "Send message to contact",
+      "method": "POST",
+      "url": "{{ base_url }}/api/messages/send",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ api_key }}" },
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"to\": \"5511999999999\",\n  \"text\": \"Olá, teste via API!\"\n}"
+      }
+    },
+    {
+      "_id": "req_send_group",
+      "_type": "request",
+      "parentId": "fld_messages",
+      "name": "Send message to group",
+      "method": "POST",
+      "url": "{{ base_url }}/api/messages/send",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ api_key }}" },
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"to\": \"120363000000000001@g.us\",\n  \"text\": \"Mensagem para o grupo!\"\n}"
+      }
+    }
+  ]
+}

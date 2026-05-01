@@ -2,6 +2,14 @@ import axios from 'axios';
 import type { Message } from 'whatsapp-web.js';
 import { BaseCommand } from '../utils/BaseCommand';
 
+interface ExchangeRate {
+  name: string;
+  code: string;
+  bid: string;
+  high: string;
+  low: string;
+}
+
 /**
  * Command to query currency exchange rates
  */
@@ -10,18 +18,25 @@ export class EconomyCommand extends BaseCommand {
   description = 'Shows current exchange rates (USD, BTC, EUR)';
   aliases = ['moeda', 'dolar', 'bitcoin'];
 
-  async execute(message: Message, args: string[]): Promise<Message> {
+  async execute(message: Message, _args: string[]): Promise<Message> {
     await this.sendTyping(message);
 
     try {
-      const { data } = await axios.get(
+      const { data } = await axios.get<Record<string, ExchangeRate>>(
         'https://economia.awesomeapi.com.br/all/USD-BRL,BTC-BRL,EUR-BRL',
       );
+
+      if (!data || typeof data !== 'object') {
+        return message.reply(
+          '⚠️ Unable to get exchange rates at the moment. Please try again later.',
+        );
+      }
 
       const getAllCurrencies = () => {
         return Object.keys(data)
           .map((key) => {
-            return `\n💲 *${data[key].name} (${data[key].code})* \nCurrent value: R$ ${data[key].bid} \nHighest value: R$ ${data[key].high} \nLowest value: R$ ${data[key].low}\n`;
+            const rate = data[key];
+            return `\n💲 *${rate.name} (${rate.code})* \nCurrent value: R$ ${rate.bid} \nHighest value: R$ ${rate.high} \nLowest value: R$ ${rate.low}\n`;
           })
           .join('');
       };

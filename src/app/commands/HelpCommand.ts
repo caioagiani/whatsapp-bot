@@ -10,7 +10,7 @@ export class HelpCommand extends BaseCommand {
   description = 'Shows all available commands with their descriptions';
   aliases = ['ajuda', 'comandos', 'commands'];
 
-  async execute(message: Message, args: string[]): Promise<Message> {
+  async execute(message: Message, _args: string[]): Promise<Message> {
     await this.sendTyping(message);
 
     const commands = commandDispatcher.getAllCommands();
