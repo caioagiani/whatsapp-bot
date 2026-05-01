@@ -58,7 +58,7 @@ export abstract class BaseCommand implements ICommand {
   ): Message | null {
     if (args.length < minArgs) {
       message.reply(`⚠️ Incorrect usage!\n\n📖 *Usage:* ${usage}`);
-      return message as any;
+      return message;
     }
     return null;
   }

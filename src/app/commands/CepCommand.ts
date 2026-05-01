@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { IResponse, IServerData } from '../interfaces/Cep';
+import type { IServerData } from '../interfaces/Cep';
 import type { Message } from 'whatsapp-web.js';
 import { BaseCommand } from '../utils/BaseCommand';
 
@@ -29,7 +29,7 @@ export class CepCommand extends BaseCommand {
     }
 
     try {
-      const { data }: IResponse = await axios.get<IServerData>(
+      const { data } = await axios.get<IServerData>(
         `https://brasilapi.com.br/api/cep/v1/${cep}`,
       );
 
