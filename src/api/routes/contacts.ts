@@ -66,9 +66,7 @@ router.get('/search', async (req, res) => {
   try {
     const all = await getAllContacts();
     const filtered = all.filter(
-      (c) =>
-        c.number.includes(q) ||
-        (c.name || '').toLowerCase().includes(q),
+      (c) => c.number.includes(q) || (c.name || '').toLowerCase().includes(q),
     );
 
     const { page, limit } = parsePagination(req);
