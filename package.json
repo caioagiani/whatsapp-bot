@@ -58,7 +58,7 @@
     "@typescript-eslint/parser": "^5.62.0",
     "dotenv": "^16.6.1",
     "eslint": "^8.57.1",
-    "eslint-config-prettier": "^8.10.2",
+    "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-prettier": "^4.2.5",
     "jest": "^30.3.0",
     "prettier": "^2.8.8",
