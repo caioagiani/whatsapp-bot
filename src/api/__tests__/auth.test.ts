@@ -53,4 +53,15 @@ describe('API Key auth middleware', () => {
 
     expect(res.status).toBe(200);
   });
+
+  it('allows request with lowercase bearer scheme', async () => {
+    process.env.API_KEY = 'secret-token';
+    botState.status = 'ready';
+
+    const res = await request(app)
+      .get('/api/status')
+      .set('Authorization', 'bearer secret-token');
+
+    expect(res.status).toBe(200);
+  });
 });

@@ -6,7 +6,12 @@ export const setupGracefulShutdown = (server: Server): void => {
   const shutdown = async (signal: string): Promise<void> => {
     console.log(`\n${signal} received — shutting down...`);
 
-    server.close(() => console.log('HTTP server closed.'));
+    await new Promise<void>((resolve) =>
+      server.close(() => {
+        console.log('HTTP server closed.');
+        resolve();
+      }),
+    );
 
     try {
       await client.destroy();

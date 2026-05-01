@@ -11,7 +11,7 @@ export const apiKeyAuth = (
     return;
   }
 
-  const provided = req.headers.authorization?.replace('Bearer ', '');
+  const provided = req.headers.authorization?.replace(/^Bearer /i, '');
   if (provided !== apiKey) {
     res.status(401).json({ error: 'Unauthorized' });
     return;
