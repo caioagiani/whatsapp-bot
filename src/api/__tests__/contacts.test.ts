@@ -51,7 +51,12 @@ describe('GET /api/contacts', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.contacts).toHaveLength(2);
-    expect(res.body.pagination).toMatchObject({ total: 3, page: 1, limit: 2, pages: 2 });
+    expect(res.body.pagination).toMatchObject({
+      total: 3,
+      page: 1,
+      limit: 2,
+      pages: 2,
+    });
   });
 
   it('returns second page correctly', async () => {
@@ -95,7 +100,9 @@ describe('GET /api/contacts', () => {
   });
 
   it('returns 500 on client error', async () => {
-    (mockClient.getContacts as jest.Mock).mockRejectedValue(new Error('WA error'));
+    (mockClient.getContacts as jest.Mock).mockRejectedValue(
+      new Error('WA error'),
+    );
 
     const res = await request(app).get('/api/contacts');
 
@@ -158,10 +165,17 @@ describe('GET /api/contacts/search', () => {
   });
 
   it('paginates search results', async () => {
-    const res = await request(app).get('/api/contacts/search?q=5511&page=1&limit=2');
+    const res = await request(app).get(
+      '/api/contacts/search?q=5511&page=1&limit=2',
+    );
 
     expect(res.status).toBe(200);
     expect(res.body.contacts).toHaveLength(2);
-    expect(res.body.pagination).toMatchObject({ total: 3, page: 1, limit: 2, pages: 2 });
+    expect(res.body.pagination).toMatchObject({
+      total: 3,
+      page: 1,
+      limit: 2,
+      pages: 2,
+    });
   });
 });

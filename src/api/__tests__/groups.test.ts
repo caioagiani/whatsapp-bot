@@ -15,7 +15,10 @@ const mockClient = client as jest.Mocked<typeof client>;
 beforeEach(() => {
   botState.status = 'ready';
   cache.clear();
-  (mockClient.getChats as jest.Mock).mockResolvedValue([...mockGroups, mockNonGroup]);
+  (mockClient.getChats as jest.Mock).mockResolvedValue([
+    ...mockGroups,
+    mockNonGroup,
+  ]);
 });
 
 describe('GET /api/groups', () => {
@@ -50,7 +53,12 @@ describe('GET /api/groups', () => {
     const res = await request(app).get('/api/groups?page=1&limit=1');
 
     expect(res.body.groups).toHaveLength(1);
-    expect(res.body.pagination).toMatchObject({ total: 2, page: 1, limit: 1, pages: 2 });
+    expect(res.body.pagination).toMatchObject({
+      total: 2,
+      page: 1,
+      limit: 1,
+      pages: 2,
+    });
   });
 
   it('returns second page', async () => {
