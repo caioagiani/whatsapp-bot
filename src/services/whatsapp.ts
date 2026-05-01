@@ -40,8 +40,7 @@ client.on('ready', async () => {
   botState.botName = client.info.pushname;
 
   const ownerPhone =
-    process.env.BOT_OWNER_PHONE ||
-    company.find((m) => m.admin)?.numero;
+    process.env.BOT_OWNER_PHONE || company.find((m) => m.admin)?.numero;
 
   if (ownerPhone) {
     try {
