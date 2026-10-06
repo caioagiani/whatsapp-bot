@@ -7,6 +7,7 @@ router.get('/', (_req, res) => {
   res.json({
     status: botState.status,
     name: botState.botName,
+    syncing: botState.syncing,
     qr: botState.status === 'qr' ? botState.qr : undefined,
   });
 });

@@ -14,8 +14,9 @@ export const IGNORED_TYPES = new Set([
 const serialized = (value: unknown): string | null => {
   if (!value) return null;
   if (typeof value === 'string') return value;
-  const v = value as { _serialized?: string };
-  return v._serialized || null;
+  // WhatsApp Web renamed `_serialized` to `$1` in its 2026-07 build.
+  const v = value as { _serialized?: string; $1?: string };
+  return v._serialized || v.$1 || null;
 };
 
 type RawData = {
@@ -31,6 +32,32 @@ type RawData = {
 const raw = (m: Message): RawData =>
   ((m as unknown as { _data?: RawData })._data || {}) as RawData;
 
+type RawKey = {
+  _serialized?: string;
+  $1?: string;
+  fromMe?: boolean;
+  remote?: unknown;
+  id?: string;
+  participant?: unknown;
+};
+
+/**
+ * Serialized message id. Current WhatsApp Web builds sometimes drop
+ * `_serialized` from message keys, so rebuild it from its parts
+ * (`fromMe_remote_id[_participant]`, same format WhatsApp uses).
+ */
+export const messageIdOf = (m: Message): string | null => {
+  const key = m.id as unknown as RawKey | undefined;
+  if (!key) return null;
+  if (key._serialized || key.$1) return (key._serialized || key.$1) as string;
+  const remote = serialized(key.remote);
+  if (!remote || !key.id) return null;
+  const participant = serialized(key.participant);
+  return `${Boolean(key.fromMe)}_${remote}_${key.id}${
+    participant ? `_${participant}` : ''
+  }`;
+};
+
 export const chatIdOf = (m: Message): string =>
   serialized((m.id as unknown as { remote?: unknown }).remote) ||
   (m.fromMe ? m.to : m.from);
@@ -42,7 +69,7 @@ export const toMessageRow = (m: Message): NewMessageRow => {
   const data = raw(m);
   const chatId = chatIdOf(m);
   return {
-    id: m.id._serialized,
+    id: messageIdOf(m) as string,
     chatId,
     fromMe: m.fromMe,
     author: m.author || (m.fromMe ? null : m.from),

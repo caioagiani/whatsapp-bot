@@ -10,6 +10,11 @@ jest.mock('../../services/whatsapp', () => ({
   MessageMedia: {},
 }));
 
+jest.mock('../../sync', () => ({
+  ...jest.requireActual('../../sync'),
+  getChatsSafe: (c: { getChats: () => Promise<unknown[]> }) => c.getChats(),
+}));
+
 const mockClient = client as jest.Mocked<typeof client>;
 
 beforeEach(() => {

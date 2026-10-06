@@ -13,7 +13,7 @@ import {
   touchChat,
   upsertMessages,
 } from '../../sync/store';
-import { isIgnorable, toMessageRow } from '../../sync/mappers';
+import { isIgnorable, messageIdOf, toMessageRow } from '../../sync/mappers';
 import { loadOlder } from '../../sync';
 import { broadcast } from '../../realtime/ws';
 import { botState } from '../state';
@@ -213,6 +213,10 @@ router.post('/:id/messages', upload.single('file'), async (req, res) => {
       return;
     }
 
+    if (!messageIdOf(sent)) {
+      res.json({ success: true });
+      return;
+    }
     const row = toMessageRow(sent);
     if (mediaBuffer && mediaMime) {
       row.hasMedia = true;
