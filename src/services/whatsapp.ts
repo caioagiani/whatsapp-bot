@@ -16,25 +16,47 @@ const client = new Client({
   },
 });
 
-// whatsapp-web.js re-runs inject() on every framenavigated without awaiting the
-// previous run, so two injects race on exposeFunction and crash. Serialize them.
-type Injectable = { inject: () => Promise<void> };
-const originalInject = (client as unknown as Injectable).inject.bind(client);
-let injectQueue: Promise<void> = Promise.resolve();
-(client as unknown as Injectable).inject = () => {
-  injectQueue = injectQueue.catch(() => undefined).then(() => originalInject());
-  return injectQueue;
-};
-
 client.on('qr', (qr) => {
   botState.status = 'qr';
   botState.qr = qr;
   qrcode.generate(qr, { small: true });
 });
+// WhatsApp Web sometimes stalls after auth and never fires `ready`
+// (seen after quick restarts). Reload the page a few times before giving up.
+const READY_TIMEOUT_MS = Number(process.env.READY_TIMEOUT_MS) || 90_000;
+let readyWatchdog: NodeJS.Timeout | undefined;
+let readyRetries = 0;
+
+const armReadyWatchdog = () => {
+  clearTimeout(readyWatchdog);
+  readyWatchdog = setTimeout(async () => {
+    if (botState.status === 'ready' || readyRetries >= 3) return;
+    readyRetries++;
+    console.warn(
+      `WhatsApp not ready ${
+        READY_TIMEOUT_MS / 1000
+      }s after auth — reloading (attempt ${readyRetries}/3)`,
+    );
+    try {
+      await client.pupPage?.reload();
+    } catch (error) {
+      console.error('Reload failed:', error);
+    }
+    armReadyWatchdog();
+  }, READY_TIMEOUT_MS);
+};
+
 client.on('authenticated', () => {
   botState.status = 'authenticated';
   botState.qr = null;
   console.log('WhatsApp authenticated.');
+  armReadyWatchdog();
+});
+client.on('loading_screen', (percent, message) => {
+  console.log(`WhatsApp loading: ${percent}% ${message}`);
+});
+client.on('change_state', (state) => {
+  console.log(`WhatsApp state: ${state}`);
 });
 client.on('auth_failure', () => {
   botState.status = 'disconnected';
@@ -46,6 +68,8 @@ client.on('disconnected', () => {
   console.log('WhatsApp lost connection.');
 });
 client.on('ready', async () => {
+  clearTimeout(readyWatchdog);
+  readyRetries = 0;
   botState.status = 'ready';
   botState.botName = client.info.pushname;
 
