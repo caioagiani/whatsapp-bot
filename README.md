@@ -39,6 +39,9 @@ This application is a WhatsApp client that connects to WhatsApp Web using **Pupp
 
 - 🤖 **Command-based Architecture** - Extensible command system with interface-based design
 - 🌐 **HTTP REST API** - Control the bot and query data programmatically
+- 💻 **Web Interface** - WhatsApp Web–style UI: chats, groups, emoji, media, voice notes, replies, search
+- 🗄️ **Local Persistence** - Messages synced to SQLite via WhatsApp events; history survives disconnects
+- ⚡ **Realtime** - WebSocket push for new messages, read receipts and chat updates
 - ⚡ **In-memory Cache** - Contacts and chats cached with configurable TTL
 - 🔄 **Alias Support** - Multiple names for the same command
 - 🛡️ **Error Handling** - Robust error handling with user-friendly messages
@@ -87,6 +90,19 @@ Authorization: Bearer <your-api-key>
 | `GET` | `/api/groups` | List all groups (paginated) |
 | `GET` | `/api/groups/:id` | Group details + participants with admin flags |
 | `POST` | `/api/messages/send` | Send a message to a contact or group |
+| `GET` | `/api/messages/:id/media` | Message media (downloaded once, cached on disk; `?download=1`) |
+| `GET` | `/api/chats` | Chats from the local store — keyset pagination (`cursor`), `q`, `filter=unread\|groups`, `archived=1` |
+| `GET` | `/api/chats/:id` | Chat details (+ group participants when connected) |
+| `GET` | `/api/chats/:id/messages` | Messages, newest page first (`before` cursor); pulls older history from WhatsApp on demand |
+| `POST` | `/api/chats/:id/messages` | Send text / file / voice note (JSON or multipart: `text`, `file`, `voice=1`, `quotedId`) |
+| `POST` | `/api/chats/:id/seen` | Mark chat as read |
+| `POST` | `/api/chats/:id/presence` | `typing` / `recording` / `stop` |
+| `GET` | `/api/chats/:id/avatar` | Profile picture (cached on disk for 24h) |
+| `GET` | `/api/search?q=` | Full-text message search (SQLite FTS5, accent-insensitive, prefix match) |
+| `GET` | `/api/directory?q=` | Saved contacts from the local store |
+| `WS` | `/ws` | Realtime events: `status`, `message.new`, `message.update`, `chat.update`, `chat.remove`, `sync` |
+
+When `API_KEY` is set, `?key=<api-key>` is also accepted (used by `<img>`/`<audio>` tags and the WebSocket).
 
 ### Pagination
 
@@ -154,6 +170,16 @@ cp .env.example .env
 npm run dev
 ```
 
+### Web Interface
+
+```bash
+npm run web:install   # once
+npm run web:build     # builds web/dist, served by the bot at http://localhost:3000
+npm run web:dev       # or: Vite dev server with HMR on :5173 (proxies /api and /ws to the bot)
+```
+
+The UI reads chats and messages from the local SQLite store, so history stays browsable (read-only) while WhatsApp is disconnected. When the bot needs pairing, the UI shows the QR code.
+
 ### First Run
 
 1. When you start the bot for the first time, a QR code will appear in your terminal
@@ -210,6 +236,18 @@ src/
 └── index.ts
 ```
 
+### Persistence & Sync
+
+WhatsApp Web has no real pagination: `getChats()` loads everything through Puppeteer and `fetchMessages` only returns the newest N. So the bot keeps a local SQLite store (Drizzle ORM, WAL mode) fed by client events:
+
+- `message_create`, `message_ack`, `message_revoke_everyone`, `message_edit`, `unread_count`, `chat_archived`, `chat_removed` → upserts + WebSocket broadcast
+- On `ready`, a backfill stores all chats and the latest `SYNC_BACKFILL_MESSAGES` of the `SYNC_BACKFILL_CHATS` most recent chats
+- Scrolling past the stored history pulls older messages from WhatsApp on demand (`history_complete` marks when it runs out)
+- Indexes: `messages(chat_id, timestamp)` and `chats(archived, pinned, last_message_at)` back the keyset cursors; `messages_fts` (FTS5 + triggers) backs search
+- Media is downloaded lazily on first view and stored under `src/data/media`; voice notes recorded in the browser are converted to ogg/opus with `ffmpeg-static`
+
+Schema changes: edit `src/db/schema.ts`, run `npm run db:generate`; migrations apply automatically on startup.
+
 ### Cache
 
 `getContacts()` and `getChats()` are expensive Puppeteer calls (~500ms). Results are cached in memory for 30 seconds (configurable via `CACHE_TTL_MS`). Cache is cleared automatically on disconnect.
@@ -231,6 +269,14 @@ BOT_OWNER_PHONE=
 
 # Cache TTL in milliseconds (default: 30000)
 CACHE_TTL_MS=30000
+
+# Local store (defaults: src/data/whatsapp.db, src/data)
+DB_PATH=
+MEDIA_DIR=
+
+# Backfill on connect (defaults: 30 chats × 50 messages)
+SYNC_BACKFILL_CHATS=30
+SYNC_BACKFILL_MESSAGES=50
 
 # Mobizon SMS (optional — required for !sms command)
 MOBIZON_URL_SRV=https://api.mobizon.com.br
