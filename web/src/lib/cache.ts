@@ -48,7 +48,21 @@ export const upsertMessage = (
       // Partial updates (e.g. an ack) for messages we haven't loaded are dropped.
       if (!('timestamp' in msg) || msg.timestamp === undefined) return data
       const first = pages[0]
-      const messages = [...first.messages, msg as Message].sort(
+      // A sent message can arrive over the socket before its POST resolves
+      // (slow sends during sync): take over the matching placeholder.
+      const placeholder = msg.fromMe
+        ? first.messages.find(
+            (m) =>
+              m.id.startsWith('local_') &&
+              m.body === (msg.body ?? '') &&
+              m.hasMedia === Boolean(msg.hasMedia) &&
+              Math.abs(m.timestamp - msg.timestamp!) < 300,
+          )
+        : undefined
+      const messages = [
+        ...first.messages.filter((m) => m !== placeholder),
+        { ...msg, localUrl: placeholder?.localUrl } as Message,
+      ].sort(
         (a, b) => a.timestamp - b.timestamp,
       )
       pages[0] = { ...first, messages }
