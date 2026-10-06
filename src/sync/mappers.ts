@@ -49,7 +49,8 @@ type RawKey = {
 export const messageIdOf = (m: Message): string | null => {
   const key = m.id as unknown as RawKey | undefined;
   if (!key) return null;
-  if (key._serialized || key.$1) return (key._serialized || key.$1) as string;
+  const direct = key._serialized || key.$1;
+  if (direct) return canonicalMessageId(direct);
   const remote = serialized(key.remote);
   if (!remote || !key.id) return null;
   const participant = serialized(key.participant);
@@ -57,6 +58,14 @@ export const messageIdOf = (m: Message): string | null => {
     participant ? `_${participant}` : ''
   }`;
 };
+
+/**
+ * Newer builds append a direction marker (`_out`) to `$1` for messages we
+ * send, while history fetches return the plain key. Store the plain form so
+ * both paths land on the same row.
+ */
+export const canonicalMessageId = (id: string): string =>
+  id.replace(/_(out|in)$/, '');
 
 export const chatIdOf = (m: Message): string =>
   serialized((m.id as unknown as { remote?: unknown }).remote) ||

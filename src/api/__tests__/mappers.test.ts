@@ -25,6 +25,15 @@ describe('messageIdOf', () => {
     expect(messageIdOf(msg({ $1: 'false_a@c.us_X' }))).toBe('false_a@c.us_X');
   });
 
+  it('drops the direction suffix newer builds add to sent messages', () => {
+    expect(messageIdOf(msg({ $1: 'true_a@lid_3EB0X_out' }))).toBe(
+      'true_a@lid_3EB0X',
+    );
+    expect(messageIdOf(msg({ _serialized: 'false_g@g.us_Y_p@lid' }))).toBe(
+      'false_g@g.us_Y_p@lid',
+    );
+  });
+
   it('rebuilds the id when _serialized is missing', () => {
     expect(
       messageIdOf(
