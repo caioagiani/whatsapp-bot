@@ -36,8 +36,8 @@ export const formatDuration = (seconds: number) => {
 /** "5511999998888@c.us" → "+55 11 99999-8888" */
 export const formatNumber = (id: string | null | undefined) => {
   if (!id) return ''
-  // @lid ids are opaque WhatsApp identifiers, not phone numbers.
-  if (id.endsWith('@lid')) return ''
+  // Only @c.us ids are phone numbers; @lid, @g.us and @newsletter are opaque.
+  if (id.includes('@') && !id.endsWith('@c.us') && !id.endsWith('@s.whatsapp.net')) return ''
   const user = id.split('@')[0]
   if (!/^\d+$/.test(user)) return user
   const m = user.match(/^55(\d{2})(\d{4,5})(\d{4})$/)
@@ -46,7 +46,7 @@ export const formatNumber = (id: string | null | undefined) => {
 }
 
 export const chatTitle = (chat: { id: string; name: string | null }) =>
-  chat.name || formatNumber(chat.id) || 'Contato'
+  chat.name || formatNumber(chat.id) || (chat.id.endsWith('@newsletter') ? 'Canal' : 'Contato')
 
 const AUTHOR_COLORS = [
   '#e542a3', '#1f7aec', '#d6851b', '#02a698', '#7f66ff',

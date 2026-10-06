@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from './lib/api'
 import { useRealtime } from './lib/realtime'
+import { usePrivacyBlur } from './lib/privacy'
 import { chatTitle } from './lib/format'
 import type { Message } from './lib/types'
 import { findChat } from './lib/cache'
@@ -18,6 +19,8 @@ export default function App() {
     const id = readHash()
     return id ? { id } : null
   })
+
+  const privacy = usePrivacyBlur()
 
   const { data: status } = useQuery({
     queryKey: ['status'],
@@ -84,8 +87,11 @@ export default function App() {
   if (status.status === 'qr') return <ConnectionScreen status={status} />
 
   return (
-    <div className={`app ${active ? 'has-chat' : ''}`}>
-      <Sidebar activeId={active?.id ?? null} botName={status?.name ?? null} status={status?.status} syncing={Boolean(status?.syncing)} onOpen={open} />
+    <div className={`app ${active ? 'has-chat' : ''} ${privacy.on ? 'is-private' : ''}`}>
+      <Sidebar activeId={active?.id ?? null} botName={status?.name ?? null} status={status?.status} syncing={Boolean(status?.syncing)}
+        privacy={privacy}
+        onOpen={open}
+      />
       <main className="content">
         {active ? (
           <ChatWindow

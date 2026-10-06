@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { Virtuoso } from 'react-virtuoso'
-import { Archive, ArrowLeft, MessageSquarePlus, Search, X } from 'lucide-react'
+import { Archive, ArrowLeft, Eye, EyeOff, MessageSquarePlus, Search, X } from 'lucide-react'
 import { api } from '../lib/api'
 import { formatListDate } from '../lib/format'
 import { useDebounced } from '../lib/hooks'
@@ -16,6 +16,7 @@ interface Props {
   botName: string | null
   status: BotStatus | undefined
   syncing: boolean
+  privacy: { on: boolean; toggle: () => void }
   onOpen: (id: string, name?: string) => void
 }
 
@@ -56,7 +57,7 @@ const LIST_COMPONENTS = {
   ),
 }
 
-export function Sidebar({ activeId, botName, status, syncing, onOpen }: Props) {
+export function Sidebar({ activeId, botName, status, syncing, privacy, onOpen }: Props) {
   const [q, setQ] = useState('')
   const [filter, setFilter] = useState<ChatFilter>('all')
   const [archived, setArchived] = useState(false)
@@ -110,6 +111,14 @@ export function Sidebar({ activeId, botName, status, syncing, onOpen }: Props) {
               <span className="sidebar__title">{botName || 'WhatsApp Bot'}</span>
             </div>
             <div className="sidebar__actions">
+              <button
+                className={`icon-btn ${privacy.on ? 'is-active' : ''}`}
+                title={`${privacy.on ? 'Desativar' : 'Ativar'} modo privacidade (Ctrl+Shift+X)`}
+                aria-pressed={privacy.on}
+                onClick={privacy.toggle}
+              >
+                {privacy.on ? <EyeOff size={22} /> : <Eye size={22} />}
+              </button>
               <button className="icon-btn" title="Nova conversa" onClick={() => setNewChat(true)}>
                 <MessageSquarePlus size={22} />
               </button>

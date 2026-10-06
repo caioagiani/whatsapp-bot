@@ -1634,3 +1634,44 @@ mark {
     padding: 28px 24px;
   }
 }
+
+/* ---------- Privacy blur ---------- */
+
+.is-private .chat-item__name,
+.is-private .chat-item__preview,
+.is-private .chat-item .avatar,
+.is-private .search-hit,
+.is-private .contact-item,
+.is-private .chat-header__text,
+.is-private .chat-header .avatar,
+.is-private .bubble > :not(.bubble__meta):not(.bubble__menu),
+.is-private .system-msg span,
+.is-private .side-panel__body,
+.is-private .reply-bar__quote {
+  filter: blur(6px);
+  transition: filter 0.15s ease;
+}
+
+/* Hovering a row/bubble reveals just that item. */
+.is-private .chat-item:hover .chat-item__name,
+.is-private .chat-item:hover .chat-item__preview,
+.is-private .chat-item:hover .avatar,
+.is-private .search-hit:hover,
+.is-private .contact-item:hover,
+.is-private .chat-header:hover .chat-header__text,
+.is-private .chat-header:hover .avatar,
+.is-private .bubble:hover > :not(.bubble__meta):not(.bubble__menu),
+.is-private .system-msg:hover span,
+.is-private .side-panel__body:hover,
+.is-private .reply-bar:hover .reply-bar__quote {
+  filter: none;
+}
+
+@media (hover: none) {
+  /* Touch: tap-and-hold (active) reveals instead of hover. */
+  .is-private .chat-item:active .chat-item__name,
+  .is-private .chat-item:active .chat-item__preview,
+  .is-private .bubble:active > :not(.bubble__meta) {
+    filter: none;
+  }
+}
