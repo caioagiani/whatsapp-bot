@@ -1,4 +1,5 @@
 module.exports = {
+  ignorePatterns: ['web/', 'dist/', 'drizzle/'],
   parser: '@typescript-eslint/parser',
   extends: [
     'plugin:@typescript-eslint/recommended',

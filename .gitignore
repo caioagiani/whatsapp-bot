@@ -10,3 +10,5 @@ src/data/*
 !src/data/.gitkeep
 .DS_Store
 
+web/dist
+web/node_modules

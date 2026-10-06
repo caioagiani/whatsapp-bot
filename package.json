@@ -33,30 +33,43 @@
   "scripts": {
     "test": "NODE_OPTIONS='--no-warnings' jest",
     "lint": "eslint . --fix --ext .js,.ts",
-    "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules -r dotenv/config src/index.ts"
+    "dev": "tsnd --respawn --transpile-only --ignore-watch node_modules -r dotenv/config src/index.ts",
+    "web:install": "npm --prefix web install",
+    "web:dev": "npm --prefix web run dev",
+    "web:build": "npm --prefix web run build",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "axios": "^1.15.2",
+    "better-sqlite3": "^13.0.3",
+    "drizzle-orm": "^0.45.3",
     "express": "^4.22.1",
+    "ffmpeg-static": "^5.3.0",
     "mobizon-node": "^0.5.0",
+    "multer": "^2.4.0",
     "node-base64-image": "^2.0.1",
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.17.1"
+    "whatsapp-web.js": "github:wwebjs/whatsapp-web.js#064a3d5",
+    "ws": "^8.22.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^12.0.6",
     "@semantic-release/npm": "^13.1.5",
+    "@types/better-sqlite3": "^9.6.0",
     "@types/express": "^4.17.25",
     "@types/jest": "^30.0.0",
+    "@types/multer": "^2.3.0",
     "@types/node": "^16.18.126",
     "@types/qrcode": "^1.5.6",
     "@types/qrcode-terminal": "^0.12.2",
     "@types/supertest": "^7.2.0",
+    "@types/ws": "^8.18.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "dotenv": "^16.6.1",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^8.10.2",
     "eslint-plugin-prettier": "^4.2.5",
@@ -67,5 +80,13 @@
     "ts-jest": "^29.4.9",
     "ts-node-dev": "2.0.0",
     "typescript": "^4.9.5"
+  },
+  "allowScripts": {
+    "better-sqlite3@13.0.3": true,
+    "ffmpeg-static@5.3.0": true,
+    "puppeteer@24.38.0": true
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

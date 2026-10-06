@@ -4,6 +4,7 @@ import { client } from '../../services/whatsapp';
 import { botState } from '../state';
 import { paginate, parsePagination } from '../utils/paginate';
 import { cache } from '../utils/cache';
+import { getChatsSafe } from '../../sync';
 
 const router = Router();
 
@@ -11,7 +12,7 @@ async function getAllChats(): Promise<Chat[]> {
   const cached = cache.get<Chat[]>('chats');
   if (cached) return cached;
 
-  const chats = await client.getChats();
+  const chats = await getChatsSafe(client);
   cache.set('chats', chats);
   return chats;
 }

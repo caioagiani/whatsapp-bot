@@ -9,6 +9,7 @@ class BotState {
   status: BotStatus = 'initializing';
   qr: string | null = null;
   botName: string | null = null;
+  syncing = false;
 }
 
 export const botState = new BotState();

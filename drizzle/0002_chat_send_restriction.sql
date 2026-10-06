@@ -1,0 +1,1 @@
+ALTER TABLE `chats` ADD `send_restriction` text;
