@@ -46,6 +46,62 @@ const armReadyWatchdog = () => {
   }, READY_TIMEOUT_MS);
 };
 
+// attachEventListeners() exposes ~20 functions; each exposeFunction installs a
+// preload script on every frame, and a short-lived iframe closing mid-way
+// rejects with "Target closed". The error is swallowed inside WhatsApp's
+// hasSynced callback, so `ready` never fires. Exposing is idempotent
+// (exposeFunctionIfAbsent), so just retry.
+type Attachable = { attachEventListeners: () => Promise<void> };
+const originalAttach = (
+  client as unknown as Attachable
+).attachEventListeners.bind(client);
+(client as unknown as Attachable).attachEventListeners = async () => {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await originalAttach();
+    } catch (error) {
+      const closed = /Target closed|detached/i.test(String(error));
+      if (!closed || attempt >= 5) {
+        console.error('attachEventListeners failed:', error);
+        throw error;
+      }
+      console.warn(
+        `attachEventListeners: frame closed, retrying (${attempt}/5)`,
+      );
+      await new Promise((r) => setTimeout(r, 500 * attempt));
+    }
+  }
+};
+
+client.on('authenticated', () => {
+  const c = client as unknown as {
+    pupPage?: {
+      evaluate: (...a: unknown[]) => Promise<unknown>;
+      __dbg?: boolean;
+    };
+    attachEventListeners: () => Promise<void>;
+    __dbg?: boolean;
+  };
+  if (c.pupPage && !c.pupPage.__dbg) {
+    c.pupPage.__dbg = true;
+    const orig = c.pupPage.evaluate.bind(c.pupPage);
+    c.pupPage.evaluate = (...a: unknown[]) =>
+      orig(...a).catch((e: unknown) => {
+        console.error('DEBUG evaluate failed:', String(a[0]).slice(0, 120), e);
+        throw e;
+      });
+  }
+  if (!c.__dbg) {
+    c.__dbg = true;
+    const origAttach = c.attachEventListeners.bind(client);
+    c.attachEventListeners = () =>
+      origAttach().catch((e: unknown) => {
+        console.error('DEBUG attachEventListeners failed:', e);
+        throw e;
+      });
+  }
+});
+
 client.on('authenticated', () => {
   botState.status = 'authenticated';
   botState.qr = null;
