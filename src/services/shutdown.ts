@@ -1,6 +1,7 @@
 import type { Server } from 'http';
 import { client } from './whatsapp';
 import { cache } from '../api/utils/cache';
+import { sqlite } from '../db';
 
 export const setupGracefulShutdown = (server: Server): void => {
   const shutdown = async (signal: string): Promise<void> => {
@@ -21,6 +22,7 @@ export const setupGracefulShutdown = (server: Server): void => {
     }
 
     cache.clear();
+    sqlite.close();
     process.exit(0);
   };
 

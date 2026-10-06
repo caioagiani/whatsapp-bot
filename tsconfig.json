@@ -15,5 +15,6 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["src", "drizzle.config.ts", "module.d.ts"]
 }
