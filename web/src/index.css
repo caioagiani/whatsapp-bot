@@ -1283,6 +1283,17 @@ mark {
   margin-bottom: 1px;
 }
 
+.composer--blocked {
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--text-2);
+  font-size: 14px;
+  text-align: center;
+}
+
 .composer__input {
   flex: 1;
   min-width: 0;

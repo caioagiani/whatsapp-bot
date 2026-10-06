@@ -27,6 +27,7 @@ export interface Chat {
   lastMessageFromMe: boolean | null
   lastMessageAck: number | null
   historyComplete: boolean
+  sendRestriction: 'admins' | 'not_participant' | 'community' | null
 }
 
 export interface Message {

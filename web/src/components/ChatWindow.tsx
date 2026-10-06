@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, MoreVertical, BellOff } from 'lucide-react'
+import { ArrowLeft, MoreVertical, BellOff, Lock } from 'lucide-react'
 import { api, mediaUrl } from '../lib/api'
 import { messagesKey, removeMessage, upsertMessage, findChat } from '../lib/cache'
 import { formatNumber } from '../lib/format'
@@ -16,6 +16,12 @@ interface Props {
   fallbackName?: string
   canSend: boolean
   onBack: () => void
+}
+
+const RESTRICTION_TEXT: Record<NonNullable<Chat['sendRestriction']>, string> = {
+  admins: 'Somente admins podem enviar mensagens neste grupo.',
+  not_participant: 'Você não pode enviar mensagens para este grupo porque não é mais participante.',
+  community: 'Não é possível enviar mensagens diretamente para a comunidade.',
 }
 
 const TYPE_BY_MIME = (mime: string, voice?: boolean) => {
@@ -188,14 +194,20 @@ export function ChatWindow({ chatId, fallbackName, canSend, onBack }: Props) {
           />
         )}
 
-        <Composer
-          chatId={chatId}
-          disabled={!canSend}
-          replyTo={replyTo}
-          onCancelReply={() => setReplyTo(null)}
-          onSend={(o) => void send(o)}
-          onPresence={presence}
-        />
+        {chat.sendRestriction ? (
+          <footer className="composer composer--blocked">
+            <Lock size={14} /> {RESTRICTION_TEXT[chat.sendRestriction]}
+          </footer>
+        ) : (
+          <Composer
+            chatId={chatId}
+            disabled={!canSend}
+            replyTo={replyTo}
+            onCancelReply={() => setReplyTo(null)}
+            onSend={(o) => void send(o)}
+            onPresence={presence}
+          />
+        )}
       </section>
 
       {infoOpen && (
