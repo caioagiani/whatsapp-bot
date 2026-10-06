@@ -184,11 +184,18 @@ const onAck = (m: Message, ack: number) => {
     .where(eq(messages.id, id))
     .run();
   const chatId = chatIdOf(m);
-  db.update(chats)
-    .set({ lastMessageAck: ack })
+  const stored = getMessage(id)?.ack ?? ack;
+  broadcast('message.update', { id, chatId, ack: stored });
+
+  // The chat list shows ticks for the last message, so push the chat too.
+  const touched = db
+    .update(chats)
+    .set({
+      lastMessageAck: sql`max(coalesce(${chats.lastMessageAck}, 0), ${ack})`,
+    })
     .where(sql`${chats.id} = ${chatId} AND ${chats.lastMessageId} = ${id}`)
     .run();
-  broadcast('message.update', { id, chatId, ack });
+  if (touched.changes > 0) emitChat(chatId);
 };
 
 const onRevoke = (after: Message) => {

@@ -14,6 +14,11 @@ jest.mock('../../services/whatsapp', () => ({
   MessageMedia: jest.fn(),
 }));
 
+jest.mock('../../realtime/ws', () => ({
+  broadcast: jest.fn(),
+  attachRealtime: jest.fn(),
+}));
+
 const mockClient = client as jest.Mocked<typeof client>;
 
 const chat = (id: string, at: number, extra = {}) => ({
@@ -244,5 +249,45 @@ describe('refreshChatLastMessage', () => {
       )
       .get('a@c.us') as { p: string; t: number };
     expect(row).toEqual({ p: 'old one', t: 99999 });
+  });
+});
+
+describe('ack sync', () => {
+  it('updates and broadcasts the chat when its last message is acked', () => {
+    const { broadcast } = jest.requireMock('../../realtime/ws') as {
+      broadcast: jest.Mock;
+    };
+    broadcast.mockClear();
+    const handlers: Record<string, (...a: unknown[]) => void> = {};
+    const { attachSync } = jest.requireActual('../../sync');
+    attachSync({ on: (e: string, fn: () => void) => (handlers[e] = fn) });
+
+    upsertChats([chat('a@c.us', 0)]);
+    const sent = {
+      ...msg('a@c.us', 9, 'hey'),
+      id: 'true_a@c.us_9',
+      fromMe: true,
+      ack: 1,
+    };
+    upsertMessages([sent]);
+    touchChat(sent);
+
+    handlers.message_ack(
+      {
+        id: { _serialized: 'true_a@c.us_9_out', remote: 'a@c.us' },
+        fromMe: true,
+        to: 'a@c.us',
+      },
+      3,
+    );
+
+    const row = sqlite
+      .prepare('SELECT last_message_ack AS a FROM chats WHERE id = ?')
+      .get('a@c.us') as { a: number };
+    expect(row.a).toBe(3);
+    expect(broadcast).toHaveBeenCalledWith(
+      'chat.update',
+      expect.objectContaining({ id: 'a@c.us', lastMessageAck: 3 }),
+    );
   });
 });

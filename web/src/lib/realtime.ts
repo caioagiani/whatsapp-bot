@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { getApiKey } from './api'
-import { removeChat, setStatus, upsertChat, upsertMessage } from './cache'
+import { findChat, removeChat, setStatus, upsertChat, upsertMessage } from './cache'
 import type { Chat, Message, Status } from './types'
 
 type Event =
@@ -43,6 +43,12 @@ export const useRealtime = (onIncoming?: (m: Message) => void) => {
           case 'message.update':
             if (!event.data) break
             upsertMessage(qc, event.data)
+            if (typeof event.data.ack === 'number') {
+              const chat = findChat(qc, event.data.chatId)
+              if (chat?.lastMessageId === event.data.id && (chat.lastMessageAck ?? 0) < event.data.ack) {
+                upsertChat(qc, { ...chat, lastMessageAck: event.data.ack })
+              }
+            }
             if (event.type === 'message.new' && !event.data.fromMe) {
               incoming.current?.(event.data as Message)
             }
