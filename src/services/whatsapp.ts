@@ -22,9 +22,7 @@ type Injectable = { inject: () => Promise<void> };
 const originalInject = (client as unknown as Injectable).inject.bind(client);
 let injectQueue: Promise<void> = Promise.resolve();
 (client as unknown as Injectable).inject = () => {
-  injectQueue = injectQueue
-    .catch(() => undefined)
-    .then(() => originalInject());
+  injectQueue = injectQueue.catch(() => undefined).then(() => originalInject());
   return injectQueue;
 };
 
