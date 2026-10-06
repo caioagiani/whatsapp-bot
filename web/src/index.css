@@ -136,6 +136,51 @@ a {
 
 /* ---------- Generic ---------- */
 
+.splash {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-2);
+}
+
+.spinner--sm {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+  flex: none;
+}
+
+/* Indeterminate bar under the banner while connecting/syncing. */
+.progress {
+  position: relative;
+  height: 3px;
+  flex: none;
+  overflow: hidden;
+  background: rgba(0, 168, 132, 0.15);
+}
+
+.progress::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  background: var(--brand);
+  animation: progress 1.2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -278,6 +323,9 @@ a {
 }
 
 .banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 10px 16px;
   font-size: 13px;
   background: #fff3c4;

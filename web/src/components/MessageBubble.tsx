@@ -108,7 +108,7 @@ export const MessageBubble = memo(function MessageBubble({
     )
   }
 
-  const authorLabel = msg.authorName || formatNumber(msg.author)
+  const authorLabel = msg.authorName || formatNumber(msg.author) || 'Participante'
 
   return (
     <div className={`msg-row ${out ? 'msg-row--out' : 'msg-row--in'} ${tail ? 'has-tail' : ''}`} data-id={msg.id}>

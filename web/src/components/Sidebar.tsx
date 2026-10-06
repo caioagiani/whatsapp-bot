@@ -15,6 +15,7 @@ interface Props {
   activeId: string | null
   botName: string | null
   status: BotStatus | undefined
+  syncing: boolean
   onOpen: (id: string, name?: string) => void
 }
 
@@ -35,6 +36,7 @@ interface ListContext {
   openArchived: () => void
   loadingMore: boolean
   empty: boolean
+  busy: boolean
 }
 
 // Module-level so Virtuoso doesn't remount them on every render.
@@ -49,12 +51,12 @@ const LIST_COMPONENTS = {
   Footer: ({ context }: { context?: ListContext }) => (
     <>
       {context?.loadingMore && <div className="spinner spinner--center" />}
-      {context?.empty && <p className="empty">Nenhuma conversa ainda.</p>}
+      {context?.empty && <p className="empty">{context.busy ? 'Carregando conversas…' : 'Nenhuma conversa ainda.'}</p>}
     </>
   ),
 }
 
-export function Sidebar({ activeId, botName, status, onOpen }: Props) {
+export function Sidebar({ activeId, botName, status, syncing, onOpen }: Props) {
   const [q, setQ] = useState('')
   const [filter, setFilter] = useState<ChatFilter>('all')
   const [archived, setArchived] = useState(false)
@@ -78,7 +80,9 @@ export function Sidebar({ activeId, botName, status, onOpen }: Props) {
 
   const items: Chat[] = chats.data?.pages.flatMap((p) => p.chats) ?? []
   const results = query.length >= 2 ? search.data?.results ?? [] : []
-  const banner = status ? STATUS_BANNER[status] : undefined
+  const banner =
+    (status && STATUS_BANNER[status]) || (status === 'ready' && syncing ? 'Sincronizando mensagens recentes…' : undefined)
+  const busy = status === 'initializing' || status === 'authenticated' || syncing
 
   return (
     <aside className="sidebar">
@@ -114,7 +118,13 @@ export function Sidebar({ activeId, botName, status, onOpen }: Props) {
         )}
       </header>
 
-      {banner && <div className={`banner banner--${status}`}>{banner}</div>}
+      {banner && (
+        <div className={`banner banner--${status}`}>
+          {busy && <span className="spinner spinner--sm" />}
+          {banner}
+        </div>
+      )}
+      {busy && <div className="progress" />}
 
       <div className="search">
         <div className="search__box">
@@ -187,6 +197,7 @@ export function Sidebar({ activeId, botName, status, onOpen }: Props) {
               openArchived: () => setArchived(true),
               loadingMore: chats.isFetchingNextPage,
               empty: items.length === 0,
+              busy,
             }}
             components={LIST_COMPONENTS}
             itemContent={(_, chat) => (

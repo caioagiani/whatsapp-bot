@@ -1,5 +1,11 @@
+import { memo } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import type { Status } from '../lib/types'
+
+// Only re-draws when the QR string itself changes (WhatsApp rotates it ~every 20s).
+const Qr = memo(function Qr({ value }: { value: string }) {
+  return <QRCodeSVG value={value} size={264} level="L" marginSize={2} />
+})
 
 export function ConnectionScreen({ status }: { status: Status | undefined }) {
   return (
@@ -21,7 +27,7 @@ export function ConnectionScreen({ status }: { status: Status | undefined }) {
         </div>
         <div className="connect__qr">
           {status?.qr ? (
-            <QRCodeSVG value={status.qr} size={264} level="L" marginSize={2} />
+            <Qr value={status.qr} />
           ) : (
             <div className="connect__placeholder">
               <div className="spinner" />

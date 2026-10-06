@@ -72,11 +72,20 @@ export default function App() {
 
   const open = useCallback((id: string, name?: string) => setActive({ id, name }), [])
 
-  if (status?.status === 'qr') return <ConnectionScreen status={status} />
+  // Wait for the first status so a QR-pending session doesn't flash the chat UI.
+  if (!status) {
+    return (
+      <div className="splash">
+        <div className="spinner" />
+        <span>Carregando…</span>
+      </div>
+    )
+  }
+  if (status.status === 'qr') return <ConnectionScreen status={status} />
 
   return (
     <div className={`app ${active ? 'has-chat' : ''}`}>
-      <Sidebar activeId={active?.id ?? null} botName={status?.name ?? null} status={status?.status} onOpen={open} />
+      <Sidebar activeId={active?.id ?? null} botName={status?.name ?? null} status={status?.status} syncing={Boolean(status?.syncing)} onOpen={open} />
       <main className="content">
         {active ? (
           <ChatWindow

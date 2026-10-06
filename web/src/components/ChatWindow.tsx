@@ -42,7 +42,7 @@ export function ChatWindow({ chatId, fallbackName, canSend, onBack }: Props) {
     staleTime: 60_000,
   })
   const chat: Partial<Chat> & { id: string } = chatDetail ?? { id: chatId, name: fallbackName || null }
-  const title = chat.name || fallbackName || formatNumber(chatId)
+  const title = chat.name || fallbackName || formatNumber(chatId) || 'Contato'
   const isGroup = chatId.endsWith('@g.us')
 
   const messages = useInfiniteQuery({
@@ -151,7 +151,7 @@ export function ChatWindow({ chatId, fallbackName, canSend, onBack }: Props) {
                 {title} {chat.muted && <BellOff size={14} />}
               </span>
               <span className="chat-header__sub">
-                {isGroup ? 'clique para ver os participantes' : chat.name ? formatNumber(chatId) : ''}
+                {isGroup ? 'clique para ver os participantes' : formatNumber(chatId) !== title ? formatNumber(chatId) : ''}
               </span>
             </div>
           </button>

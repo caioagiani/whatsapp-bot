@@ -40,7 +40,7 @@ export function GroupInfo({ chatId, title, isGroup, participants, onClose }: Pro
                 .map((p) => (
                   <li key={p.id}>
                     <Avatar id={p.id} name={p.number} size={40} />
-                    <span className="participants__name">{formatNumber(p.id)}</span>
+                    <span className="participants__name">{formatNumber(p.id) || 'Participante'}</span>
                     {(p.isAdmin || p.isSuperAdmin) && (
                       <span className="badge">
                         <Shield size={12} /> admin

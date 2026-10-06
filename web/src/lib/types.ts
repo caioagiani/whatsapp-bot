@@ -9,6 +9,7 @@ export interface Status {
   status: BotStatus
   name: string | null
   qr?: string
+  syncing?: boolean
 }
 
 export interface Chat {

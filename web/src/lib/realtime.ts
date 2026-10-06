@@ -53,9 +53,12 @@ export const useRealtime = (onIncoming?: (m: Message) => void) => {
           case 'chat.remove':
             removeChat(qc, event.data.id)
             break
-          case 'sync':
-            if (event.data.state === 'done') void qc.invalidateQueries({ queryKey: ['chats'] })
+          case 'sync': {
+            const syncing = event.data.state === 'started'
+            qc.setQueryData<Status>(['status'], (s) => (s ? { ...s, syncing } : s))
+            if (!syncing) void qc.invalidateQueries({ queryKey: ['chats'] })
             break
+          }
         }
       }
 
