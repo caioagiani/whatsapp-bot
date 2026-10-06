@@ -47,6 +47,10 @@ router.get('/', (req, res) => {
 
   const where = [eq(chats.archived, archived)];
   if (filter === 'unread') where.push(sql`${chats.unreadCount} > 0`);
+  // Channels get their own tab, like WhatsApp's "Updates".
+  const isChannel = sql`${chats.id} LIKE '%@newsletter'`;
+  if (filter === 'channels') where.push(isChannel);
+  else if (!q) where.push(sql`NOT (${isChannel})`);
   if (filter === 'groups') where.push(eq(chats.isGroup, true));
   if (q) where.push(sql`${chats.name} LIKE ${`%${q}%`} COLLATE NOCASE`);
   if (cursor) {

@@ -94,4 +94,4 @@ export interface MessagePage {
   baseCount?: number
 }
 
-export type ChatFilter = 'all' | 'unread' | 'groups'
+export type ChatFilter = 'all' | 'unread' | 'groups' | 'channels'

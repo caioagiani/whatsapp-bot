@@ -97,6 +97,9 @@ export const upsertChat = (qc: QueryClient, chat: Chat) => {
       chat.archived === Boolean(archived) &&
       (filter !== 'unread' || chat.unreadCount > 0) &&
       (filter !== 'groups' || chat.isGroup) &&
+      (filter === 'channels'
+        ? chat.id.endsWith('@newsletter')
+        : Boolean(q) || !chat.id.endsWith('@newsletter')) &&
       (!q || (chat.name || '').toLowerCase().includes(q.toLowerCase()))
 
     const existedAt = data.pages.findIndex((p) => p.chats.some((c) => c.id === chat.id))

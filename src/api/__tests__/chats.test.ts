@@ -91,6 +91,20 @@ describe('GET /api/chats', () => {
       'alice@c.us',
     ]);
   });
+
+  it('keeps channels in their own tab', async () => {
+    upsertChats([chat('alice@c.us', 1), chat('news@newsletter', 2)]);
+    const ids = (res: request.Response) =>
+      res.body.chats.map((c: { id: string }) => c.id);
+
+    expect(ids(await request(app).get('/api/chats'))).toEqual(['alice@c.us']);
+    expect(ids(await request(app).get('/api/chats?filter=channels'))).toEqual([
+      'news@newsletter',
+    ]);
+    expect(ids(await request(app).get('/api/chats?q=news'))).toEqual([
+      'news@newsletter',
+    ]);
+  });
 });
 
 describe('GET /api/chats/:id/messages', () => {

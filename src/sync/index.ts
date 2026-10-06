@@ -43,16 +43,28 @@ export const getChatsSafe = async (
   const result = (await page.evaluate(async (ids?: string[]) => {
     const w = window as unknown as {
       require: (m: string) => any;
-      WWebJS: { getChatModel: (c: unknown) => Promise<any> };
+      WWebJS: {
+        getChatModel: (c: unknown, o?: { isChannel?: boolean }) => Promise<any>;
+      };
     };
-    const collection = w.require('WAWebCollections').Chat;
+    const collections = w.require('WAWebCollections');
+    // Channels live in their own collection, outside the chat list.
+    const channels = collections.WAWebNewsletterCollection;
+    const isChannelId = (id: string) => id.endsWith('@newsletter');
     const models = ids
       ? ids
           .map((id) =>
-            collection.get(w.require('WAWebWidFactory').createWid(id)),
+            isChannelId(id)
+              ? channels?.get(id)
+              : collections.Chat.get(
+                  w.require('WAWebWidFactory').createWid(id),
+                ),
           )
           .filter(Boolean)
-      : collection.getModelsArray();
+      : [
+          ...collections.Chat.getModelsArray(),
+          ...(channels?.getModelsArray() ?? []),
+        ];
 
     // Mirrors the reasons WhatsApp Web swaps the composer for a notice.
     const restrictionOf = (chat: any): string | null => {
@@ -80,7 +92,10 @@ export const getChatsSafe = async (
     for (const chat of models) {
       let model: any;
       try {
-        model = await w.WWebJS.getChatModel(chat);
+        const id = chat.id?._serialized || chat.id?.$1 || '';
+        model = await w.WWebJS.getChatModel(chat, {
+          isChannel: isChannelId(id),
+        });
       } catch (e) {
         // getChatModel resolves the last message via chat.lastReceivedKey,
         // whose _serialized is missing on some WhatsApp Web builds. Fall
@@ -101,6 +116,10 @@ export const getChatsSafe = async (
           });
           continue;
         }
+      }
+      // Channel titles live in the newsletter metadata, not on the chat.
+      if (!model.name && chat.newsletterMetadata?.name) {
+        model.name = chat.newsletterMetadata.name;
       }
       try {
         model.sendRestriction = restrictionOf(chat);

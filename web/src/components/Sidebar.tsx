@@ -24,6 +24,7 @@ const FILTERS: { key: ChatFilter; label: string }[] = [
   { key: 'all', label: 'Tudo' },
   { key: 'unread', label: 'Não lidas' },
   { key: 'groups', label: 'Grupos' },
+  { key: 'channels', label: 'Canais' },
 ]
 
 const STATUS_BANNER: Partial<Record<BotStatus, string>> = {
