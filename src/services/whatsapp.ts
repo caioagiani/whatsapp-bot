@@ -16,6 +16,18 @@ const client = new Client({
   },
 });
 
+// whatsapp-web.js re-runs inject() on every framenavigated without awaiting the
+// previous run, so two injects race on exposeFunction and crash. Serialize them.
+type Injectable = { inject: () => Promise<void> };
+const originalInject = (client as unknown as Injectable).inject.bind(client);
+let injectQueue: Promise<void> = Promise.resolve();
+(client as unknown as Injectable).inject = () => {
+  injectQueue = injectQueue
+    .catch(() => undefined)
+    .then(() => originalInject());
+  return injectQueue;
+};
+
 client.on('qr', (qr) => {
   botState.status = 'qr';
   botState.qr = qr;
