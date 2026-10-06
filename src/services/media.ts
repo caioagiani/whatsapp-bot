@@ -13,6 +13,7 @@ const DATA_DIR = process.env.MEDIA_DIR || resolve(__dirname, '..', 'data');
 const MEDIA_DIR = resolve(DATA_DIR, 'media');
 const AVATAR_DIR = resolve(DATA_DIR, 'avatars');
 const AVATAR_TTL_MS = 24 * 60 * 60 * 1000;
+const NO_AVATAR_TTL_MS = 6 * 60 * 60 * 1000;
 
 const EXT: Record<string, string> = {
   'image/jpeg': 'jpg',
@@ -129,17 +130,15 @@ export const getAvatarFile = async (id: string): Promise<string | null> => {
 
   if (existsSync(path)) {
     const stat = statSync(path);
-    if (Date.now() - stat.mtimeMs < AVATAR_TTL_MS) {
+    const ttl = stat.size > 0 ? AVATAR_TTL_MS : NO_AVATAR_TTL_MS;
+    if (Date.now() - stat.mtimeMs < ttl) {
       return stat.size > 0 ? path : null;
     }
   }
 
-  let url: string | undefined;
-  try {
-    url = await client.getProfilePicUrl(id);
-  } catch {
-    url = undefined;
-  }
+  // Let lookup errors propagate: only a successful "no picture" answer is
+  // cached, otherwise a transient failure would hide the avatar for hours.
+  const url = await client.getProfilePicUrl(id);
 
   if (!url) {
     writeFileSync(path, '');

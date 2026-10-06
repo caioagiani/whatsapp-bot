@@ -276,19 +276,20 @@ router.post('/:id/presence', async (req, res) => {
 
 router.get('/:id/avatar', async (req, res) => {
   if (botState.status !== 'ready') {
-    res.status(404).end();
+    res.set('Cache-Control', 'no-store').status(404).end();
     return;
   }
   try {
     const path = await getAvatarFile(req.params.id);
     if (!path) {
-      res.set('Cache-Control', 'public, max-age=3600').status(404).end();
+      res.set('Cache-Control', 'private, max-age=600').status(404).end();
       return;
     }
-    res.set('Cache-Control', 'public, max-age=3600');
+    res.set('Cache-Control', 'private, max-age=3600');
     res.sendFile(path);
-  } catch {
-    res.status(404).end();
+  } catch (error) {
+    console.error(`Avatar lookup failed for ${req.params.id}:`, error);
+    res.set('Cache-Control', 'no-store').status(404).end();
   }
 });
 
