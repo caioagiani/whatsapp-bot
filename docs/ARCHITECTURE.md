@@ -834,3 +834,27 @@ This architecture provides:
 - ✅ **Reliability** - Robust error handling
 
 For questions or contributions, please refer to the main [README](../README.md).
+
+---
+
+## Web Interface & Persistence
+
+WhatsApp Web has no real pagination: `getChats()` serializes every chat through Puppeteer and `fetchMessages` only returns the newest N. The bot therefore keeps a local SQLite store (Drizzle ORM, WAL) and the UI reads only from it.
+
+```
+WhatsApp Web ──events──▶ src/sync ──upsert──▶ SQLite ◀──query── src/api ◀── web/ (React)
+                              └────────── broadcast ──▶ /ws ──────────────▲
+```
+
+- **Events → store:** `message_create`, `message_ack`, `message_revoke_everyone`, `message_edit`, `unread_count`, `chat_archived`, `chat_removed`, `group_*` upsert rows and broadcast over WebSocket.
+- **Backfill:** on `ready`, all chats plus the latest `SYNC_BACKFILL_MESSAGES` of the `SYNC_BACKFILL_CHATS` most recent ones. Older history is pulled on demand when the UI scrolls past it (`history_complete` marks the end).
+- **Indexes:** `messages(chat_id, timestamp)` and `chats(archived, pinned, last_message_at)` back keyset cursors; `messages_fts` (FTS5 + triggers) backs search.
+- **Media:** downloaded lazily on first view into `src/data/media`. Browser voice notes are converted to ogg/opus with `ffmpeg-static`.
+- **Send restrictions:** each chat stores why the bot can't post (`admins`, `not_participant`, `community`); the UI swaps the composer for a notice and the API returns `403`.
+- **Resilience:** `getChatsSafe` serializes chats one by one so a broken chat can't fail the whole list; message ids are normalized (`_serialized` / `$1`, `_out` suffix); `attachEventListeners` is retried when a frame closes mid-inject; a watchdog reloads the page if `ready` stalls after auth.
+
+Schema changes: edit `src/db/schema.ts`, run `npm run db:generate`; migrations apply on startup.
+
+### Frontend (`web/`)
+
+React 19 + Vite + TanStack Query. Chat list and messages are virtualized (`react-virtuoso`) with infinite queries over the API cursors; realtime events patch the query cache in place. Messages are sent optimistically and reconciled with the server row.
