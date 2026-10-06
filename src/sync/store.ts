@@ -1,9 +1,7 @@
 import { and, eq, sql } from 'drizzle-orm';
 import { db } from '../db';
 import { chats, contacts, messages, type NewMessageRow } from '../db/schema';
-import { previewOf, toChatRow } from './mappers';
-
-type ChatInput = ReturnType<typeof toChatRow>;
+import { previewOf, type ChatInput } from './mappers';
 
 export const upsertMessages = (rows: NewMessageRow[]): void => {
   if (rows.length === 0) return;
@@ -49,6 +47,9 @@ export const upsertChats = (rows: ChatInput[]): void => {
             pinned: row.pinned,
             muted: row.muted,
             lastMessageAt: sql`max(${chats.lastMessageAt}, ${row.lastMessageAt})`,
+            ...(row.sendRestriction !== undefined && {
+              sendRestriction: row.sendRestriction,
+            }),
           },
         })
         .run();

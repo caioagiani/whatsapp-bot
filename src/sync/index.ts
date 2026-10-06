@@ -34,26 +34,59 @@ const ChatFactory = require('whatsapp-web.js/src/factories/ChatFactory');
  * broken chat (left group, stale metadata) rejects the whole list. Serialize
  * each chat on its own and skip the ones that fail.
  */
-export const getChatsSafe = async (client: Client): Promise<Chat[]> => {
+export const getChatsSafe = async (
+  client: Client,
+  onlyIds?: string[],
+): Promise<Chat[]> => {
   const page = (client as unknown as { pupPage: import('puppeteer').Page })
     .pupPage;
-  const result = (await page.evaluate(async () => {
+  const result = (await page.evaluate(async (ids?: string[]) => {
     const w = window as unknown as {
       require: (m: string) => any;
-      WWebJS: { getChatModel: (c: unknown) => Promise<unknown> };
+      WWebJS: { getChatModel: (c: unknown) => Promise<any> };
     };
-    const models = w.require('WAWebCollections').Chat.getModelsArray();
-    const ok: unknown[] = [];
+    const collection = w.require('WAWebCollections').Chat;
+    const models = ids
+      ? ids
+          .map((id) =>
+            collection.get(w.require('WAWebWidFactory').createWid(id)),
+          )
+          .filter(Boolean)
+      : collection.getModelsArray();
+
+    // Mirrors the reasons WhatsApp Web swaps the composer for a notice.
+    const restrictionOf = (chat: any): string | null => {
+      const meta = chat.groupMetadata;
+      if (!meta) return null;
+      if (meta.isParentGroup) return 'community';
+      const participants = meta.participants;
+      const iAmMember =
+        typeof participants?.iAmMember === 'function'
+          ? participants.iAmMember()
+          : chat.isReadOnly !== true;
+      if (!iAmMember) return 'not_participant';
+      const iAmAdmin =
+        typeof chat.iAmAdmin === 'function'
+          ? chat.iAmAdmin()
+          : typeof participants?.iAmAdmin === 'function'
+          ? participants.iAmAdmin()
+          : false;
+      if (meta.announce && !iAmAdmin) return 'admins';
+      return null;
+    };
+
+    const ok: any[] = [];
     const failed: { id: string; error: string }[] = [];
     for (const chat of models) {
+      let model: any;
       try {
-        ok.push(await w.WWebJS.getChatModel(chat));
+        model = await w.WWebJS.getChatModel(chat);
       } catch (e) {
         // getChatModel resolves the last message via chat.lastReceivedKey,
-        // whose _serialized is missing on current WhatsApp Web builds. Fall
+        // whose _serialized is missing on some WhatsApp Web builds. Fall
         // back to the plain chat fields, which is all the sync needs.
         try {
-          const model = chat.serialize();
+          model = chat.serialize();
           model.isGroup = Boolean(chat.groupMetadata);
           model.isMuted = chat.mute?.expiration !== 0;
           model.formattedTitle = chat.formattedTitle;
@@ -61,17 +94,23 @@ export const getChatsSafe = async (client: Client): Promise<Chat[]> => {
           delete model.msgs;
           delete model.msgUnsyncedButtonReplyMsgs;
           delete model.unsyncedButtonReplies;
-          ok.push(model);
         } catch {
           failed.push({
             id: chat?.id?._serialized,
             error: String((e as Error)?.message || e),
           });
+          continue;
         }
       }
+      try {
+        model.sendRestriction = restrictionOf(chat);
+      } catch {
+        model.sendRestriction = null;
+      }
+      ok.push(model);
     }
     return { ok, failed };
-  })) as { ok: unknown[]; failed: { id: string; error: string }[] };
+  }, onlyIds)) as { ok: unknown[]; failed: { id: string; error: string }[] };
 
   if (result.failed.length) {
     console.warn(
@@ -79,7 +118,14 @@ export const getChatsSafe = async (client: Client): Promise<Chat[]> => {
       result.failed.slice(0, 5),
     );
   }
-  return result.ok.filter(Boolean).map((c) => ChatFactory.create(client, c));
+  return result.ok.filter(Boolean).map((raw) => {
+    const chat = ChatFactory.create(client, raw);
+    // ChatFactory drops unknown fields; carry ours over for toChatRow.
+    chat.sendRestriction = (
+      raw as { sendRestriction?: string | null }
+    ).sendRestriction;
+    return chat;
+  });
 };
 
 const emitChat = (chatId: string): void => {
@@ -93,8 +139,8 @@ const hydrateChat = async (client: Client, chatId: string): Promise<void> => {
   if (hydrating.has(chatId)) return;
   hydrating.add(chatId);
   try {
-    const chat = await client.getChatById(chatId);
-    upsertChats([toChatRow(chat)]);
+    const [chat] = await getChatsSafe(client, [chatId]);
+    if (chat) upsertChats([toChatRow(chat)]);
     emitChat(chatId);
   } catch (error) {
     console.error(`Failed to hydrate chat ${chatId}:`, error);
@@ -301,6 +347,16 @@ export const attachSync = (client: Client): void => {
       .run();
     emitChat(chat.id._serialized);
   });
+
+  // Admin-only toggles, promotions/demotions, joins and leaves change
+  // whether we can post; re-read the chat when any of them happen.
+  const refreshChat = (n: { chatId?: string }) => {
+    if (n?.chatId) void hydrateChat(client, n.chatId);
+  };
+  client.on('group_update', refreshChat);
+  client.on('group_admin_changed', refreshChat);
+  client.on('group_join', refreshChat);
+  client.on('group_leave', refreshChat);
 
   client.on('chat_archived', (chat: Chat, archived: boolean) => {
     db.update(chats)

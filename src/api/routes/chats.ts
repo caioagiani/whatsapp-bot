@@ -161,6 +161,13 @@ router.post('/:id/messages', upload.single('file'), async (req, res) => {
   if (!ensureReady(res)) return;
 
   const chatId = toChatId(req.params.id);
+  const restriction = getChat(chatId)?.sendRestriction;
+  if (restriction) {
+    res
+      .status(403)
+      .json({ error: 'Cannot send messages to this chat', restriction });
+    return;
+  }
   const {
     text = '',
     quotedId,

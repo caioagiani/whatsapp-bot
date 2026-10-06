@@ -38,6 +38,7 @@ const msg = (chatId: string, n: number, body = `msg ${n}`) => ({
 });
 
 beforeEach(() => {
+  jest.clearAllMocks();
   sqlite.exec('DELETE FROM messages; DELETE FROM chats; DELETE FROM contacts;');
   botState.status = 'disconnected';
 });
@@ -191,6 +192,28 @@ describe('POST /api/chats/:id/messages', () => {
       lastMessagePreview: 'hi',
       lastMessageFromMe: true,
     });
+  });
+
+  it('refuses chats where the bot cannot post', async () => {
+    botState.status = 'ready';
+    upsertChats([chat('g@g.us', 0, { sendRestriction: 'admins' })]);
+    const res = await request(app)
+      .post('/api/chats/g@g.us/messages')
+      .send({ text: 'hi' });
+    expect(res.status).toBe(403);
+    expect(res.body.restriction).toBe('admins');
+    expect(mockClient.sendMessage).not.toHaveBeenCalled();
+  });
+
+  it('keeps the stored restriction when an update omits it', async () => {
+    upsertChats([chat('g@g.us', 0, { sendRestriction: 'admins' })]);
+    upsertChats([chat('g@g.us', 5)]);
+    const res = await request(app).get('/api/chats/g@g.us');
+    expect(res.body.sendRestriction).toBe('admins');
+
+    upsertChats([chat('g@g.us', 6, { sendRestriction: null })]);
+    const cleared = await request(app).get('/api/chats/g@g.us');
+    expect(cleared.body.sendRestriction).toBeNull();
   });
 
   it('rejects empty message', async () => {

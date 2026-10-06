@@ -15,6 +15,13 @@
       "when": 1791246570479,
       "tag": "0001_messages_fts",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1791249048872,
+      "tag": "0002_chat_send_restriction",
+      "breakpoints": true
     }
   ]
 }

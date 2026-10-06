@@ -16,6 +16,9 @@ export const chats = sqliteTable(
     lastMessageType: text('last_message_type'),
     lastMessageFromMe: integer('last_message_from_me', { mode: 'boolean' }),
     lastMessageAck: integer('last_message_ack'),
+    // Why the bot can't post here: 'admins' (announcement group, not admin),
+    // 'not_participant' (left/removed), 'community' (community parent). Null = can send.
+    sendRestriction: text('send_restriction'),
     // Set once older history has been exhausted on WhatsApp's side.
     historyComplete: integer('history_complete', { mode: 'boolean' })
       .notNull()

@@ -117,7 +117,19 @@ export const previewOf = (row: NewMessageRow): string => {
   return label || row.body || '';
 };
 
-export const toChatRow = (c: Chat) => ({
+export interface ChatInput {
+  id: string;
+  name: string | null;
+  isGroup: boolean;
+  unreadCount: number;
+  archived: boolean;
+  pinned: boolean;
+  muted: boolean;
+  lastMessageAt: number;
+  sendRestriction?: string | null;
+}
+
+export const toChatRow = (c: Chat): ChatInput => ({
   id: c.id._serialized,
   name: c.name || null,
   isGroup: c.isGroup,
@@ -126,4 +138,7 @@ export const toChatRow = (c: Chat) => ({
   pinned: Boolean(c.pinned),
   muted: Boolean(c.isMuted),
   lastMessageAt: c.timestamp || 0,
+  // Only set when read from our own page serializer; undefined keeps the stored value.
+  sendRestriction: (c as Chat & { sendRestriction?: string | null })
+    .sendRestriction,
 });
